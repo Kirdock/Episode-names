@@ -1,0 +1,8 @@
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\bin\Release\Rename.9.exe.config
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\bin\Release\Rename.9.exe
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\bin\Release\Rename.9.pdb
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\obj\Release\Rename._9.Form1.resources
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\obj\Release\Rename._9.Properties.Resources.resources
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\obj\Release\Rename.9.csproj.GenerateResource.Cache
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\obj\Release\Rename.9.exe
+C:\Users\Klaus\documents\visual studio 2013\Projects\Rename.9\Rename.9\obj\Release\Rename.9.pdb
