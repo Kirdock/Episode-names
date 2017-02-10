@@ -87,7 +87,8 @@ namespace Episode_Names
                     }
                     #endregion
 
-                    HashSet<FileInfo> infos = new HashSet<FileInfo>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+                    List<FileInfo> infos = new List<FileInfo>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+                    infos.Sort(new FileInfoComparator());
                     int countFileLines = data?.Count ?? 0;
                     pgBar.Maximum = infos.Count;
                     DialogResult? result = null;
@@ -161,7 +162,7 @@ namespace Episode_Names
 
 
         #region Anpassen des Format-Strings und Umbenennen der Dateien
-        private void RenameFiles(HashSet<FileInfo> infos)
+        private void RenameFiles(List<FileInfo> infos)
         {
             try
             {
@@ -439,7 +440,7 @@ namespace Episode_Names
 
 
         #region Starten von Data_Insert mit geholten Daten
-        private void startData_Insert(object data)
+        private void startData_Insert(List<string> data)
         {
             Data_Insert form = new Data_Insert(data);
             DialogResult result = form.ShowDialog();
@@ -455,7 +456,11 @@ namespace Episode_Names
         {
             try
             {
-                HashSet<string> liste = new HashSet<string>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0).Select(f => f.Name.Replace(f.Extension, "")));
+                List<FileInfo> infos = new List<FileInfo>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+                infos.Sort(new FileInfoComparator());
+                List <string> liste = new List<string>(infos.Select(f => f.Name.Replace(f.Extension, "")));
+                //List<string> liste = new List<string>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0).Select(f => f.Name.Replace(f.Extension, "")));
+
                 startData_Insert(liste);   
             }
 
@@ -638,7 +643,8 @@ namespace Episode_Names
             */
             
 
-            HashSet<FileInfo> infos = new HashSet<FileInfo>( new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+            List<FileInfo> infos = new List<FileInfo>( new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+            infos.Sort(new FileInfoComparator());
             
 
             pgBar.Maximum = infos.Count;

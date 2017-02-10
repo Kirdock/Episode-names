@@ -33,7 +33,7 @@ namespace Episode_Names
         }
 
         #region Hineinschreiben von bereits geholten Daten
-        public Data_Insert(object data)
+        public Data_Insert(List<string> data)
         {
             Data_InsertCons();
             setRichTextData(data);
@@ -46,16 +46,10 @@ namespace Episode_Names
             setData();
         }
 
-        private void setRichTextData(object data)
+        private void setRichTextData(List<string> data)
         {
-            if(data.GetType() == typeof(HashSet<string>))
-            {
-                richTextBox1.Text = string.Join("\n", (HashSet<string>) data);
-            }
-            else
-            {
-                richTextBox1.Text = string.Join("\n", (List<string>)data);
-            }
+            
+            richTextBox1.Text = string.Join("\n", (List<string>)data);
             
             richTextBox1.SelectAll();
             richTextBox1.SelectionFont = richTextBox1.Font;
