@@ -21,7 +21,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9D4B9814AE4A388A6D2FDC870746FCBD"
+        "MsmKey" = "8:_6765399AEAAAEA08F1FC7F41FFCD859A"
         "OwnerKey" = "8:_9E554B9020F64DCAAA95E14E70874337"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_9D4B9814AE4A388A6D2FDC870746FCBD"
+        "OwnerKey" = "8:_6765399AEAAAEA08F1FC7F41FFCD859A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,14 +190,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9D4B9814AE4A388A6D2FDC870746FCBD"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6765399AEAAAEA08F1FC7F41FFCD859A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_9D4B9814AE4A388A6D2FDC870746FCBD"
+                    "_6765399AEAAAEA08F1FC7F41FFCD859A"
                     {
                     "Name" = "8:HtmlAgilityPack.dll"
                     "Attributes" = "3:512"
@@ -277,15 +277,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Episode-Names"
-        "ProductCode" = "8:{56B459BD-F4ED-4A57-9241-E50A28FD31F9}"
-        "PackageCode" = "8:{9B4E3BAD-C64D-43D5-BB5E-3D17B658CDE5}"
+        "ProductCode" = "8:{F636333F-9011-46FB-B3F8-B0EC207E010F}"
+        "PackageCode" = "8:{8AB9C31B-3929-4709-8150-E7C1EABFB8A1}"
         "UpgradeCode" = "8:{31419C3E-8314-4E65-871F-F9998448D4CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.1"
+        "ProductVersion" = "8:1.4.4"
         "Manufacturer" = "8:Kirdock"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -83,26 +83,35 @@ namespace Episode_Names.Anisearch
             {
                 WebRequest objRequest = WebRequest.Create(url);
                 WebResponse objResponse = objRequest.GetResponse();
-                StreamReader sr = new StreamReader(objResponse.GetResponseStream());
-
-            
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(sr.ReadToEnd());
-                sr.Close();
-                objResponse.Close();
-            
-
-                HtmlNode table = doc.DocumentNode.SelectNodes("//table//tbody")[0];
-                List<KeyValuePair<string, string>> data = new List<KeyValuePair<string, string>>();
-            
-                foreach (HtmlNode row in table.SelectNodes("tr"))
+                if (objResponse.ResponseUri.ToString().Contains("/index/"))
                 {
-                    string text = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
-                    //string text = (row.SelectNodes("th//div") != null) ? WebUtility.HtmlDecode(row.SelectNodes("th//div")[0].InnerText) : WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
-                    string nurl = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a[@href]")[0].Attributes["href"].Value);
-                    data.Add(new KeyValuePair<string, string>(domain + "/" + nurl, text));
+                    StreamReader sr = new StreamReader(objResponse.GetResponseStream());
+
+
+                    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                    doc.LoadHtml(sr.ReadToEnd());
+                    sr.Close();
+                    objResponse.Close();
+
+
+                    HtmlNode table = doc.DocumentNode.SelectNodes("//table//tbody")[0];
+                    List<KeyValuePair<string, string>> data = new List<KeyValuePair<string, string>>();
+
+                    foreach (HtmlNode row in table.SelectNodes("tr"))
+                    {
+                        string text = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
+                        //string text = (row.SelectNodes("th//div") != null) ? WebUtility.HtmlDecode(row.SelectNodes("th//div")[0].InnerText) : WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
+                        string nurl = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a[@href]")[0].Attributes["href"].Value);
+                        data.Add(new KeyValuePair<string, string>(domain + "/" + nurl, text));
+                    }
+                    add(data);
                 }
-                add(data);
+                else
+                {
+                    this.url = objResponse.ResponseUri.ToString();
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
             }
             catch (Exception exception)
             {

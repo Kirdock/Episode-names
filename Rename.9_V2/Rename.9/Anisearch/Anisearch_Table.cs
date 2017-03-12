@@ -71,11 +71,11 @@ namespace Episode_Names.Anisearch
         #region Url überprüfen
         private void checkUrl()
         {
-            string[] text = txtUrl.Text.Replace("http://", "").Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] text = txtUrl.Text.Replace("http://", "").Replace("https://", "").Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
             if (txtUrl.Text.ToUpper().Contains("ANISEARCH.") && text.Length>=3)
             {
                 language = ((KeyValuePair<string, string>)comboBox1.SelectedItem).Key;
-                string domain = "http://";
+                string domain = "https://";
                 if (language.Equals("en") || language.Equals("de"))
                 {
                     domain += "anisearch." + (language.Equals("de") ? language : "com");
@@ -175,7 +175,6 @@ namespace Episode_Names.Anisearch
             
             data = new List<string>();
             HtmlNode table = doc.DocumentNode.SelectNodes("//table[@class='responsive-table episodes']//tbody")[0];
-            Console.WriteLine(table.InnerHtml);
             foreach (HtmlNode row in table.SelectNodes("tr"))
             {
                 string line = null;
@@ -185,7 +184,6 @@ namespace Episode_Names.Anisearch
                 try {
                     line = WebUtility.HtmlDecode(row.SelectNodes("th")[0].InnerText) + "\t" +
                             WebUtility.HtmlDecode(row.SelectNodes("td")[1].SelectSingleNode("div[@lang='" + language + "']").InnerText);
-                    Console.WriteLine(line);
                 }
                 catch (NullReferenceException){
                 }

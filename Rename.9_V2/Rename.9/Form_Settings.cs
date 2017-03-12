@@ -85,7 +85,15 @@ namespace Episode_Names
                 "\n" +
                 "\nVersion 1.4.1" +
                 "\n\t•    Changelog hinzugefügt" +
-                "\n\t•    An Anisearch-Website angepasst";
+                "\n\t•    An Anisearch-Website angepasst" +
+                "\n" +
+                "\n" +
+                "\nVersion 1.4.2" +
+                "\n\t•    Bugfix: Links von Anisearch mit \"https\" haben nicht funktioniert" +
+                "\n" +
+                "\n" +
+                "\nVersion 1.4.3" +
+                "\n\t•    Die Anisearch-Suche hat nicht funktioniert, wenn sie genau ein Ergebnis ergab (Anisearch leitet dann nämlich gleich zur Seite des Animes weiter)";
 
 #if DEBUG
             rtbChangelog.ReadOnly = false;
