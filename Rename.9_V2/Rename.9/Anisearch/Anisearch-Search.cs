@@ -70,7 +70,7 @@ namespace Episode_Names.Anisearch
         #region Ergebnisse suchen
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            string domain = "http://www.";
+            string domain = "https://www.";
             if (new List<string> { "de", "en", "com" }.Contains(selectedLanguage)){
                 domain += "anisearch." + (selectedLanguage.Equals("de") ? selectedLanguage : "com");
             }
@@ -78,7 +78,8 @@ namespace Episode_Names.Anisearch
                 domain += selectedLanguage + ".anisearch.com";
 
 
-            string url = domain + "/anime/index/?char=all&text=" + txtSearch.Text.Replace(" ", "%20") + "&q=true";
+            string url = domain + "/anime/index/?char=all&text=" + txtSearch.Text.Replace(" ", "%20") + "&q=true&view=2";
+            Console.WriteLine(url);
             try
             {
                 WebRequest objRequest = WebRequest.Create(url);
@@ -93,10 +94,8 @@ namespace Episode_Names.Anisearch
                     sr.Close();
                     objResponse.Close();
 
-
                     HtmlNode table = doc.DocumentNode.SelectNodes("//table//tbody")[0];
                     List<KeyValuePair<string, string>> data = new List<KeyValuePair<string, string>>();
-
                     foreach (HtmlNode row in table.SelectNodes("tr"))
                     {
                         string text = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
@@ -121,8 +120,9 @@ namespace Episode_Names.Anisearch
             {
                 stopProgress();
             }
+            stopProgress();
 
-            
+
         }
         #endregion
 

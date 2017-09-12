@@ -197,11 +197,6 @@
             "AssemblyAsmDisplayName" = "8:HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_6765399AEAAAEA08F1FC7F41FFCD859A"
-                    {
-                    "Name" = "8:HtmlAgilityPack.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:HtmlAgilityPack.dll"
             "TargetName" = "8:"
@@ -277,15 +272,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Episode-Names"
-        "ProductCode" = "8:{F636333F-9011-46FB-B3F8-B0EC207E010F}"
-        "PackageCode" = "8:{8AB9C31B-3929-4709-8150-E7C1EABFB8A1}"
+        "ProductCode" = "8:{437C29EA-217F-4A24-B660-44012B557EF0}"
+        "PackageCode" = "8:{3B97288E-67A2-4CFE-A8CB-93B63C74F47E}"
         "UpgradeCode" = "8:{31419C3E-8314-4E65-871F-F9998448D4CD}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.4"
+        "ProductVersion" = "8:1.4.5"
         "Manufacturer" = "8:Kirdock"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -68,3 +68,4 @@ C:\Users\kstri\Documents\Visual Studio 2015\Projects\Rename.9_V2\Rename.9\obj\Re
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\Episode-Names.exe.config
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.exe
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.pdb
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csproj.CoreCompileInputs.cache
