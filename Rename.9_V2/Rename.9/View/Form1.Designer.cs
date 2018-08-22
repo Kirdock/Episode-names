@@ -119,7 +119,7 @@
             // 
             // txtSplit
             // 
-            this.txtSplit.Location = new System.Drawing.Point(476, 85);
+            this.txtSplit.Location = new System.Drawing.Point(477, 84);
             this.txtSplit.Name = "txtSplit";
             this.txtSplit.Size = new System.Drawing.Size(113, 20);
             this.txtSplit.TabIndex = 24;
@@ -252,7 +252,7 @@
             "Text aufspalten",
             "Positionen löschen",
             "Bei Position einfügen"});
-            this.cmbOption.Location = new System.Drawing.Point(353, 85);
+            this.cmbOption.Location = new System.Drawing.Point(353, 84);
             this.cmbOption.Name = "cmbOption";
             this.cmbOption.Size = new System.Drawing.Size(108, 21);
             this.cmbOption.TabIndex = 23;
@@ -260,7 +260,7 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(353, 85);
+            this.txtSearch.Location = new System.Drawing.Point(353, 84);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(160, 20);
             this.txtSearch.TabIndex = 23;

@@ -601,7 +601,7 @@ namespace Episode_Names
 
         #region Visibilität von Controls setzen (Trigger ist Klick auf Search&Replace
         private void setVisibility(bool v){
-            int x = 416;
+            int x = 477;
             string text = "Search && Replace";
 
             txtSearch.Visible = v;
@@ -619,7 +619,7 @@ namespace Episode_Names
             {
                 nbPosition.Visible = !v;
                 lblPosition.Visible = !v;
-                x = 468;
+                x = 529;
                 text = "Rename";
                 if(cmbOption.SelectedIndex == 0)
                     Properties.Settings.Default.splitString = txtSplit.Text;
