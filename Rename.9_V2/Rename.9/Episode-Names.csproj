@@ -72,8 +72,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\..\..\..\..\..\Windows\System32\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.8.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\..\Setup1\packages\HtmlAgilityPack.1.8.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,60 +89,50 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\AbortException.cs" />
-    <Compile Include="Anisearch\Anisearch-Search.cs">
+    <Compile Include="View\SearchWebsite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Anisearch\Anisearch-Search.Designer.cs">
-      <DependentUpon>Anisearch-Search.cs</DependentUpon>
+    <Compile Include="View\SearchWebsite.Designer.cs">
+      <DependentUpon>SearchWebsite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Anisearch\Anisearch_Table.cs">
+    <Compile Include="View\Data_Insert.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Anisearch\Anisearch_Table.Designer.cs">
-      <DependentUpon>Anisearch_Table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data_Insert.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Data_Insert.Designer.cs">
+    <Compile Include="View\Data_Insert.Designer.cs">
       <DependentUpon>Data_Insert.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileFolderDialog.cs">
+    <Compile Include="View\FileFolderDialog.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileInfoComparator.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="View\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Settings.cs">
+    <Compile Include="View\Form_Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Settings.Designer.cs">
+    <Compile Include="View\Form_Settings.Designer.cs">
       <DependentUpon>Form_Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <EmbeddedResource Include="Anisearch\Anisearch-Search.resx">
-      <DependentUpon>Anisearch-Search.cs</DependentUpon>
+    <EmbeddedResource Include="View\SearchWebsite.resx">
+      <DependentUpon>SearchWebsite.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Anisearch\Anisearch_Table.resx">
-      <DependentUpon>Anisearch_Table.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data_Insert.resx">
+    <EmbeddedResource Include="View\Data_Insert.resx">
       <DependentUpon>Data_Insert.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="View\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Settings.resx">
+    <EmbeddedResource Include="View\Form_Settings.resx">
       <DependentUpon>Form_Settings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -156,6 +146,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

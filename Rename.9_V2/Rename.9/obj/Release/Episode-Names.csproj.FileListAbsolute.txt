@@ -57,8 +57,6 @@ C:\Users\kstri\Documents\Visual Studio 2015\Projects\Rename.9_V2\Rename.9\obj\Re
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.pdb
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\Episode-Names.exe
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\Episode-Names.pdb
-\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csprojResolveAssemblyReference.cache
-\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode_Names.Anisearch.Anisearch_Search.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode_Names.Anisearch.Anisearch_Table.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode_Names.Data_Insert.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode_Names.Form1.resources
@@ -69,3 +67,8 @@ D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\Episod
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.exe
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.pdb
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csproj.CoreCompileInputs.cache
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csproj.CopyComplete
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csprojAssemblyReference.cache
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.dll
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.pdb
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.xml
