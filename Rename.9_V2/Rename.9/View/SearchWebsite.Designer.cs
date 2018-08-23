@@ -181,6 +181,7 @@ namespace Episode_Names.Anisearch
             this.cmbWebsite.Items.AddRange(new object[] {
             "aniDB",
             "Anisearch",
+            "Fernsehserien.de",
             "TVDB"});
             this.cmbWebsite.Location = new System.Drawing.Point(53, 6);
             this.cmbWebsite.Name = "cmbWebsite";
@@ -212,7 +213,7 @@ namespace Episode_Names.Anisearch
             this.cmbSeasons.FormattingEnabled = true;
             this.cmbSeasons.Location = new System.Drawing.Point(44, 355);
             this.cmbSeasons.Name = "cmbSeasons";
-            this.cmbSeasons.Size = new System.Drawing.Size(121, 21);
+            this.cmbSeasons.Size = new System.Drawing.Size(231, 21);
             this.cmbSeasons.TabIndex = 15;
             // 
             // btnCheckURL
