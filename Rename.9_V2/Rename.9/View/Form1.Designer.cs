@@ -119,7 +119,7 @@
             // 
             // txtSplit
             // 
-            this.txtSplit.Location = new System.Drawing.Point(477, 84);
+            this.txtSplit.Location = new System.Drawing.Point(467, 82);
             this.txtSplit.Name = "txtSplit";
             this.txtSplit.Size = new System.Drawing.Size(113, 20);
             this.txtSplit.TabIndex = 24;
@@ -159,21 +159,21 @@
             // newDataToolStripMenuItem
             // 
             this.newDataToolStripMenuItem.Name = "newDataToolStripMenuItem";
-            this.newDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newDataToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.newDataToolStripMenuItem.Text = "Neue Daten";
             this.newDataToolStripMenuItem.Click += new System.EventHandler(this.insertDataToolStripMenuItem_Click);
             // 
             // editDataToolStripMenuItem
             // 
             this.editDataToolStripMenuItem.Name = "editDataToolStripMenuItem";
-            this.editDataToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editDataToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.editDataToolStripMenuItem.Text = "Daten bearbeiten";
             this.editDataToolStripMenuItem.Click += new System.EventHandler(this.editDataToolStripMenuItem_Click);
             // 
             // getFileNamesToolStripMenuItem1
             // 
             this.getFileNamesToolStripMenuItem1.Name = "getFileNamesToolStripMenuItem1";
-            this.getFileNamesToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.getFileNamesToolStripMenuItem1.Size = new System.Drawing.Size(171, 22);
             this.getFileNamesToolStripMenuItem1.Text = "Dateinamen holen";
             this.getFileNamesToolStripMenuItem1.Click += new System.EventHandler(this.getFileNamesToolStripMenuItem_Click);
             // 
@@ -252,7 +252,7 @@
             "Text aufspalten",
             "Positionen löschen",
             "Bei Position einfügen"});
-            this.cmbOption.Location = new System.Drawing.Point(353, 84);
+            this.cmbOption.Location = new System.Drawing.Point(353, 82);
             this.cmbOption.Name = "cmbOption";
             this.cmbOption.Size = new System.Drawing.Size(108, 21);
             this.cmbOption.TabIndex = 23;
@@ -260,7 +260,7 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(353, 84);
+            this.txtSearch.Location = new System.Drawing.Point(353, 82);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(160, 20);
             this.txtSearch.TabIndex = 23;

@@ -68,7 +68,6 @@ D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episod
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.pdb
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csproj.CoreCompileInputs.cache
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csproj.CopyComplete
-\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csprojAssemblyReference.cache
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.dll
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.pdb
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.xml
