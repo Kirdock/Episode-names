@@ -465,15 +465,23 @@ namespace Episode_Names.Anisearch
 
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(ur.AbsoluteUri);
-
-            HtmlNode table = doc.DocumentNode.SelectNodes("//table[@id= 'animelist']//tbody")[0];
-            foreach (HtmlNode row in table.SelectNodes("tr"))
+            
+            string url = web.ResponseUri.ToString();
+            if (url.StartsWith("https://anidb.net/perl-bin/animedb.pl?show=anime&aid="))
             {
-                string text = WebUtility.HtmlDecode(row.SelectSingleNode("td[@data-label='Title']//a").InnerText);
-                string nurl = WebUtility.HtmlDecode(row.SelectSingleNode("td//a[@href]").Attributes["href"].Value);
-                resultUrl.Add(new KeyValuePair<string, string>(aniDBDomain + nurl, text));
+                setUrl(url);
             }
-            setReceivedUrls(resultUrl);
+            else
+            {
+                HtmlNode table = doc.DocumentNode.SelectNodes("//table[@id= 'animelist']//tbody")[0];
+                foreach (HtmlNode row in table.SelectNodes("tr"))
+                {
+                    string text = WebUtility.HtmlDecode(row.SelectSingleNode("td[@data-label='Title']//a").InnerText);
+                    string nurl = WebUtility.HtmlDecode(row.SelectSingleNode("td//a[@href]").Attributes["href"].Value);
+                    resultUrl.Add(new KeyValuePair<string, string>(aniDBDomain + nurl, text));
+                }
+                setReceivedUrls(resultUrl);
+            }
         }
 
         private void searchTextTVDB(string searchText, string language) //Thread

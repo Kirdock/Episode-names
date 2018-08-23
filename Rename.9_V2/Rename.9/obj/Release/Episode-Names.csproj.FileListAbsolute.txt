@@ -71,3 +71,4 @@ D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episod
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.dll
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.pdb
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Release\HtmlAgilityPack.xml
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Release\Episode-Names.csprojAssemblyReference.cache
