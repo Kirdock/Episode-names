@@ -33,5 +33,5 @@ using System.Resources;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.4.*")]
-[assembly: AssemblyFileVersion("1.4.11")]
+[assembly: AssemblyFileVersion("1.4.14")]
 [assembly: NeutralResourcesLanguageAttribute("")]

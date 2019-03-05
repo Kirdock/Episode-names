@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Episode_Names.Helper;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -231,8 +232,7 @@ namespace Episode_Names.Anisearch
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
             
-            var tables = doc.DocumentNode.SelectNodes("//table[@class='episodenliste']//tbody[@itemprop='season']");
-            Console.Write(tables[0].InnerHtml);
+            var tables = doc.DocumentNode.SelectNodes("//table[(@class='episodenliste' or @class='episodenliste-2019')]//tbody[@itemprop='season']");
             int beginCounter = season == 0 ? 0 : season-1;
             int endCounter = season == 0 ? tables.Count - 1 : season-1;
             for (int i = beginCounter; i <= endCounter; i++)
@@ -240,25 +240,15 @@ namespace Episode_Names.Anisearch
                 foreach (HtmlNode row in tables[i].SelectNodes("tr[@itemprop='episode']"))
                 {
                     string line = null;
-                    try
-                    {
-                        StringBuilder builder = new StringBuilder();
+                    StringBuilder builder = new StringBuilder();
 
-                        builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[1].InnerText).Trim()).Append("\t");
-                        builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[4].InnerText).Trim()).Append("\t");
-                        builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[6].SelectSingleNode("span[@itemprop='name']").InnerText).Trim());
+                    builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[1]?.InnerText ?? string.Empty).Trim()).Append("\t");
+                    builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[4]?.InnerText ?? string.Empty).Trim()).Append("\t");
+                    var episodeTitle = row.SelectSingleNode("td//span[@itemprop='name']")?.InnerText ?? row.SelectSingleNode("td [@lang='ja']//span[@itemprop='name']")?.InnerText ?? string.Empty;
+                    builder.Append(WebUtility.HtmlDecode(episodeTitle).Trim());
 
-                        line = builder.ToString();
-                    }
-                    catch (NullReferenceException)
-                    {
-                    }
-
-
-                    if (line != null)
-                    {
-                        episodeList.Add(line.Trim());
-                    }
+                    line = builder.ToString();
+                    episodeList.Add(line.Trim());
                 }
             }
         }
@@ -388,10 +378,14 @@ namespace Episode_Names.Anisearch
             {
                 StopProgressBar();
                 if (exception is FileNotFoundException)
-                    Form1.MessagesOK(MessageBoxIcon.Error, "HtmlAgilityPack.dll konnte nicht gefunden werden");
+                {
+                    MessageHandler.MessagesOK(MessageBoxIcon.Error, "HtmlAgilityPack.dll konnte nicht gefunden werden");
+                }
 
                 else
-                    Form1.ErrorMessage(exception);
+                {
+                    ErrorHelper.HandleException(exception);
+                }
             };
             BeginInvoke(LabelUpdate);
         }
@@ -558,7 +552,7 @@ namespace Episode_Names.Anisearch
 
         private void searchTextFernsehserien(string searchText)
         {
-            Uri ur = new Uri($"{fernsehserienDommain}/suche/{adjustSearchTextTVDB(searchText)}");
+            Uri ur = new Uri($"{fernsehserienDommain}/suche/{adjustSearchTextTVDB(searchText).Replace("%2F"," ")}");
             List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
 
             HtmlWeb web = new HtmlWeb();
@@ -740,11 +734,27 @@ namespace Episode_Names.Anisearch
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
 
             List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
-            foreach (HtmlNode row in doc.DocumentNode.SelectNodes("//nav[@id= 'serienmenu']/ul/li")[1].SelectNodes("ul/li"))
+            var menuList = doc.DocumentNode.SelectNodes("//nav[@id= 'serienmenu']/ul/li");
+            var seasons = menuList[1].SelectNodes("ul/li");
+            foreach(HtmlNode node in menuList)
             {
-                string text = WebUtility.HtmlDecode(row.InnerText).Trim();
-                string nurl = WebUtility.HtmlDecode(row.SelectSingleNode("a[@href]").Attributes["href"].Value);
-                resultUrl.Add(new KeyValuePair<string, string>(tvdbDomain + nurl, text));
+                if(node.SelectSingleNode("a").InnerText == "Episodenguide")
+                {
+                    seasons = node.SelectNodes("ul/li");
+                }
+            }
+            if (seasons != null)
+            {
+                foreach (HtmlNode row in seasons)
+                {
+                    string text = WebUtility.HtmlDecode(row.InnerText).Trim();
+                    string nurl = WebUtility.HtmlDecode(row.SelectSingleNode("a[@href]").Attributes["href"].Value);
+                    resultUrl.Add(new KeyValuePair<string, string>(tvdbDomain + nurl, text));
+                }
+            }
+            else
+            {
+                resultUrl.Add(new KeyValuePair<string, string>(url, "Übersicht"));
             }
             setSeasons(resultUrl);
         }
@@ -768,7 +778,7 @@ namespace Episode_Names.Anisearch
 
         private void setSeasons(object data)
         {
-            cmbSeasons.Invoke(new MethodInvoker(() =>
+            cmbSeasons.BeginInvoke(new MethodInvoker(() =>
             {
                 cmbSeasons.DataSource = null;
                 cmbSeasons.DataSource = data;

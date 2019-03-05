@@ -1,5 +1,6 @@
 ﻿using Episode_Names.Anisearch;
 using Episode_Names.Exceptions;
+using Episode_Names.Helper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,6 +40,7 @@ namespace Episode_Names
             pgBar.Value = cmbOption.SelectedIndex = 0;
             txtMessage.Text = "";
             abort = false;
+            Updater.CheckUpdate(true, pgBar);
         }
         #endregion
 
@@ -97,10 +99,10 @@ namespace Episode_Names
 
                     #region Überprüfen ob Datensätze mit Dateianzahl übereinstimmt
                     if (infos.Count > countFileLines)
-                        result = MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich mehr Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
+                        result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich mehr Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
 
                     else if (infos.Count < countFileLines)
-                        result = MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich weniger Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
+                        result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich weniger Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
                     #endregion
 
                     if (result == DialogResult.Yes || result == null)
@@ -114,7 +116,7 @@ namespace Episode_Names
 
                 catch (IOException)
                 {
-                    DialogResult? result = MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
+                    DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
                     if (result == DialogResult.Yes)
                         restore();
                 }
@@ -129,35 +131,10 @@ namespace Episode_Names
                
             }
             else
-                MessagesOK(MessageBoxIcon.Exclamation,"Es wurden keine Daten gesetzt");
+                MessageHandler.MessagesOK(MessageBoxIcon.Exclamation,"Es wurden keine Daten gesetzt");
                  
         }
 
-        #endregion
-
-
-        #region Ausgeben von MessageBoxen mit einem Yes- und einem No-Button
-        public static DialogResult? MessagesYesNo(MessageBoxIcon messageBoxIcon, string text)
-        {
-            string warnung = (messageBoxIcon == MessageBoxIcon.Exclamation) ? "Achtung!" : ((messageBoxIcon == MessageBoxIcon.Error)) ? "Warnung!" : "Frage";
-            return MessageBox.Show(text,
-                                warnung,
-                                MessageBoxButtons.YesNo,
-                                messageBoxIcon,
-                                MessageBoxDefaultButton.Button1);
-        }
-        #endregion
-
-
-        #region Ausgeben von MessageBoxen mit nur einem OK-Button
-        public static void MessagesOK(MessageBoxIcon messageBoxIcon, string text)
-        {
-            MessageBox.Show(text,
-                            (messageBoxIcon == MessageBoxIcon.Exclamation) ? "Achtung!" : (messageBoxIcon == MessageBoxIcon.Error) ? "Warnung!" : "Info",
-                            MessageBoxButtons.OK,
-                            messageBoxIcon,
-                            MessageBoxDefaultButton.Button1);
-        }
         #endregion
 
 
@@ -201,9 +178,11 @@ namespace Episode_Names
         {
             string[] text = Properties.Settings.Default.formatString.Split(new string[] { "%" }, StringSplitOptions.RemoveEmptyEntries);
 
-            List<string> formates = new List<string>();
-            formates.Add("n");
-            formates.Add("pos");
+            List<string> formates = new List<string>
+            {
+                "n",
+                "pos"
+            };
             formates.AddRange(Enumerable.Range(1, 99).Reverse().ToArray().Select(x => x.ToString()).ToList());
             
             string fullname = "";
@@ -250,11 +229,11 @@ namespace Episode_Names
                             //Falls eine Position im Format-String nicht existiert
                             if (!abort)
                             {
-                                DialogResult? res = MessagesYesNo(MessageBoxIcon.Error, $"Die Position {nbPosition.Value} mit dem Split-String: {txtSplit.Text} gibt es nicht\nVorgang fortsetzen?");
+                                DialogResult? res = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, $"Die Position {nbPosition.Value} mit dem Split-String: {txtSplit.Text} gibt es nicht\nVorgang fortsetzen?");
 
                                 if (res == DialogResult.No)
                                 {
-                                    res = MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
+                                    res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
                                     if (res == DialogResult.Yes)
                                         restore();
                                     throw new AbortException();
@@ -366,12 +345,12 @@ namespace Episode_Names
                 }
                 catch (IOException)
                 {
-                    MessagesOK(MessageBoxIcon.Error,"Restore nicht möglich, da eine Datei den alten Namen einer anderen Datei besitzt.");
+                    MessageHandler.MessagesOK(MessageBoxIcon.Error, "Restore nicht möglich, da eine Datei den alten Namen einer anderen Datei besitzt.");
                 }
 
                 catch (Exception e1)
                 {
-                    ErrorMessage(e1);
+                    ErrorHelper.HandleException(e1);
                 }
                 finally
                 {
@@ -379,7 +358,9 @@ namespace Episode_Names
                 }
             }
             else
-                MessagesOK(MessageBoxIcon.Exclamation, "Es sind keine Daten zum Wiederherstellen vorhanden");
+            {
+                MessageHandler.MessagesOK(MessageBoxIcon.Exclamation, "Es sind keine Daten zum Wiederherstellen vorhanden");
+            }
         }
         #endregion
 
@@ -434,7 +415,7 @@ namespace Episode_Names
                 startData_Insert(data);
             }
             else
-                MessagesOK(MessageBoxIcon.Error, "Es sind keine Daten vorhanden, welche bearbeitet werden können");
+                MessageHandler.MessagesOK(MessageBoxIcon.Error, "Es sind keine Daten vorhanden, welche bearbeitet werden können");
         }
         #endregion
 
@@ -458,9 +439,7 @@ namespace Episode_Names
             {
                 List<FileInfo> infos = new List<FileInfo>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
                 infos.Sort(new FileInfoComparator());
-                infos.ForEach(x => Console.WriteLine(x.Name));
                 List <string> liste = new List<string>(infos.Select(f => f.Name.Replace(f.Extension, "")));
-                liste.ForEach(x => Console.WriteLine(x));
                 //List<string> liste = new List<string>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0).Select(f => f.Name.Replace(f.Extension, "")));
 
                 startData_Insert(liste);   
@@ -468,7 +447,7 @@ namespace Episode_Names
 
             catch (Exception e1)
             {
-                ErrorMessage(e1);
+                ErrorHelper.HandleException(e1);
             }
         }
         #endregion
@@ -494,51 +473,6 @@ namespace Episode_Names
         }
         #endregion
 
-
-        #region Ausgeben der ErrorMessages
-        public static void ErrorMessage(Exception exception)
-        {
-            if (exception is DirectoryNotFoundException)
-                MessagesOK(MessageBoxIcon.Exclamation, "Das Verzeichnis wurde nicht gefunden");
-
-            else if(exception is FileNotFoundException)
-                MessagesOK(MessageBoxIcon.Error, "Die Datei konnte nicht gefunden werden");
-
-            //else if (exception is ArgumentNullException)
-              //  MessagesOK(MessageBoxIcon.Error, "");
-
-            else if (exception is ArgumentException)
-                MessagesOK(MessageBoxIcon.Error, "Ein Befehl beinhaltet ungültige Argumente");
-
-            else if (exception is System.Security.SecurityException)
-                MessagesOK(MessageBoxIcon.Error, "Ein Sicherheitsfehler ist aufgetreten");
-
-            else if (exception is UnauthorizedAccessException)
-                MessagesOK(MessageBoxIcon.Error, "Der Zugriff wurde verweigert!");
-
-            else if (exception is PathTooLongException)
-                MessagesOK(MessageBoxIcon.Error, "Der Pfad ist zu lang");
-
-            else if (exception is NotSupportedException)
-                MessagesOK(MessageBoxIcon.Error, "Der Vorgang wird nicht unterstützt");
-
-            else if (exception is UriFormatException)
-                MessagesOK(MessageBoxIcon.Error, "Ungültige Url");
-
-            else if (exception is System.Net.WebException)
-                MessagesOK(MessageBoxIcon.Error, "Die Webseite wurde nicht gefunden");
-
-            else if (exception is NullReferenceException)
-                MessagesOK(MessageBoxIcon.Error, "Keine Ergebnisse gefunden");
-
-            else if (exception is InvalidOperationException || exception is ArgumentOutOfRangeException)
-                MessagesOK(MessageBoxIcon.Error, "Ungültige Eingabe!");
-
-            else
-                MessagesOK(MessageBoxIcon.Exclamation, "Unbekannter Fehler aufgetreten");
-
-        }
-        #endregion
 
 
         #region Anisearch Menüpunkt
@@ -587,7 +521,7 @@ namespace Episode_Names
         {
             switch (searchReplaceToolStripMenuItem.Text)
             {
-                case "Rename":
+                case "Umbenennen":
                     setVisibility(false);
                     break;
 
@@ -620,7 +554,7 @@ namespace Episode_Names
                 nbPosition.Visible = !v;
                 lblPosition.Visible = !v;
                 x = 529;
-                text = "Rename";
+                text = "Umbenennen";
                 if(cmbOption.SelectedIndex == 0)
                     Properties.Settings.Default.splitString = txtSplit.Text;
                 string splitText = Properties.Settings.Default.SR_Replace;
@@ -719,7 +653,7 @@ namespace Episode_Names
             }
             catch (IOException)
             {
-                DialogResult? result = MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
+                DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
 
                 if (result == DialogResult.Yes)
                     restore();
@@ -730,7 +664,7 @@ namespace Episode_Names
             }
             catch (Exception ex)
             {
-                ErrorMessage(ex);
+                ErrorHelper.HandleException(ex);
             }
             finally
             {
@@ -766,11 +700,11 @@ namespace Episode_Names
                 {
                     if (!abort)
                     {
-                        DialogResult? res = MessagesYesNo(MessageBoxIcon.Error, $"Die Position {position} konnte nicht in jedem File gefunden werden\nVorgang fortsetzen?");
+                        DialogResult? res = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, $"Die Position {position} konnte nicht in jedem File gefunden werden\nVorgang fortsetzen?");
 
                         if (res == DialogResult.No)
                         {
-                            res = MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
+                            res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
                             if (res == DialogResult.Yes)
                                 restore();
                             throw new AbortException();
@@ -867,5 +801,15 @@ namespace Episode_Names
                 Properties.Settings.Default.splitString = txtSplit.Text;
         }
         #endregion
+
+        private void updateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Updater.CheckUpdate(false, pgBar);
+        }
+
+        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kirdock/Episode-names/releases");
+        }
     }
 }

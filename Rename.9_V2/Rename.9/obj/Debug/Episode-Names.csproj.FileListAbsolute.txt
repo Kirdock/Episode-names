@@ -42,11 +42,30 @@ D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_
 D:\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.GenerateResource.Cache
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Debug\Episode-Names.exe
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Debug\Episode-Names.pdb
-\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csprojResolveAssemblyReference.cache
-\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Anisearch.Anisearch_Search.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Anisearch.Anisearch_Table.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Data_Insert.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Form1.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Form_Settings.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Properties.Resources.resources
 \\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.GenerateResource.Cache
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Debug\HtmlAgilityPack.dll
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Debug\HtmlAgilityPack.pdb
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\bin\Debug\HtmlAgilityPack.xml
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.CoreCompileInputs.cache
+\\KIRDOCK-NAS\Dokumente\visual studio 2015\Projects\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.CopyComplete
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csprojAssemblyReference.cache
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Anisearch.Anisearch_Table.resources
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Data_Insert.resources
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Form1.resources
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Form_Settings.resources
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode_Names.Properties.Resources.resources
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.GenerateResource.cache
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.CoreCompileInputs.cache
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.exe
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.pdb
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\bin\Debug\Episode-Names.exe.config
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\bin\Debug\Episode-Names.exe
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\bin\Debug\Episode-Names.pdb
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Klaus\Documents\GitHub\Episode-names\Rename.9_V2\Rename.9\obj\Debug\Episode-Names.csproj.CopyComplete

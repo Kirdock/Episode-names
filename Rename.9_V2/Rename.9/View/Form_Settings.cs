@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Episode_Names.Helper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -184,7 +185,7 @@ namespace Episode_Names
         {
             if (saveData())
             {
-                Form1.MessagesOK(MessageBoxIcon.Information, "Gespeichert");
+                MessageHandler.MessagesOK(MessageBoxIcon.Information, "Gespeichert");
                 setTopMost();
             }
         }
@@ -210,7 +211,7 @@ namespace Episode_Names
                 success = true;
             }
             else
-                Form1.MessagesOK(MessageBoxIcon.Error, "Ungültiger Format-String!");
+                MessageHandler.MessagesOK(MessageBoxIcon.Error, "Ungültiger Format-String!");
 
             return success;
 
@@ -280,7 +281,7 @@ namespace Episode_Names
         {
             if (valueChanged)
             {
-                DialogResult? result = Form1.MessagesYesNo(MessageBoxIcon.Warning, "Die Einstellungen wurden nicht gespeichert!\n Jetzt speichern?");
+                DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Warning, "Die Einstellungen wurden nicht gespeichert!\n Jetzt speichern?");
                 if (result == DialogResult.Yes)
                 {
                     if (!saveData())
@@ -311,7 +312,7 @@ namespace Episode_Names
 #region Standardwerte wiederherstellen
         private void btnFacSet_Click(object sender, EventArgs e)
         {
-            DialogResult? result = Form1.MessagesYesNo(MessageBoxIcon.Exclamation, "Sind Sie sicher, dass Sie die Einstellungen zurücksetzen wollen?");
+            DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Sind Sie sicher, dass Sie die Einstellungen zurücksetzen wollen?");
             if (result == DialogResult.Yes)
             {
                 Properties.Settings.Default.Reset();
