@@ -222,49 +222,18 @@ namespace Episode_Names
 #region Überprüfen ob der FormatString gültig ist
         private bool FormatStringValid()
         {
-            string[] text = txtFormat.Text.Split(new string[] { "%" }, StringSplitOptions.RemoveEmptyEntries);
+            IEnumerable<string> text = txtFormat.Text.Split(new string[] { SettingHelper.Separator.ToString() }, StringSplitOptions.RemoveEmptyEntries);
+            text = txtFormat.Text.StartsWith(SettingHelper.Separator.ToString()) ? text : text.Skip(1);
 
             List<string> formates = SettingHelper.Formates;
+
+            bool withoutNumber = text.Any(item => formates.Where(format => format != SettingHelper.Number).Any(format => item.Length >= format.Length && item.Substring(0, format.Length) == format));
+            bool onlyNumber = text.Any(item => item.Length >= SettingHelper.Number.Length && item.Substring(0, SettingHelper.Number.Length) == SettingHelper.Number);
             
 
-            bool AllValid = false;
-            bool IfOnlyNumber = true;
-            bool firstIndex = true;
-
-            foreach (string item in text)
-            {
-                bool StringValid = false;
-
-                if (txtFormat.Text.Substring(0, 1) == SettingHelper.Separator.ToString() || firstIndex)
-                {
-                    for (int count = 0; count < formates.Count && !StringValid; count++)
-                    {
-                        if (item.Length >= formates[count].Length && item.Substring(0, formates[count].Length) == formates[count])
-                        {
-                            StringValid = true;
-                            if (formates[count] != SettingHelper.Number)
-                            {
-                                IfOnlyNumber = false;
-                            }
-                        }
-                    }
-
-                    if (StringValid)
-                    {
-                        AllValid = true;
-                        if (!IfOnlyNumber)
-                        {
-                            break;
-                        }
-                        //Deswegen nicht sofort break, weil es sonst noch "OnlyNumber" sein könnte
-                    }
-                }
-                firstIndex = false;
-            }
-
-            Properties.Settings.Default.OnlyNumber = IfOnlyNumber;
+            Properties.Settings.Default.OnlyNumber = onlyNumber && !withoutNumber;
             Properties.Settings.Default.Save();
-            return AllValid;
+            return withoutNumber || onlyNumber;
         }
 #endregion
 

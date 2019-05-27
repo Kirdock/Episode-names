@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -178,84 +179,91 @@ namespace Episode_Names
         #region Format-String wird angepasst
         private string FormatString(string row, string dirName)
         {
-            string[] text = Properties.Settings.Default.formatString.Split(new string[] { SettingHelper.Separator.ToString() }, StringSplitOptions.RemoveEmptyEntries);
+            IEnumerable<string> text = Properties.Settings.Default.formatString.Split(new string[] { SettingHelper.Separator.ToString() }, StringSplitOptions.RemoveEmptyEntries);
 
             List<string> formates = SettingHelper.Formates;
-            
-            string fullname = string.Empty;
-            bool firstIndex = true;
+            List<string> formatesWithoutNumeration = SettingHelper.FormatesWithoutNumeration;
+
+            StringBuilder fullname = new StringBuilder();
+            if (!Properties.Settings.Default.formatString.StartsWith(SettingHelper.Separator.ToString()))
+            {
+                fullname.Append(text.FirstOrDefault() ?? string.Empty);
+                text = text.Skip(1);
+            }
 
             foreach (string line in text)
             {
-                if (Properties.Settings.Default.formatString.Substring(0, 1) == SettingHelper.Separator.ToString() || firstIndex)
+                string format = formates.Where(f => line.Length >= f.Length && line.Substring(0, f.Length) == f).OrderBy(f=>f,new StringComparator()).LastOrDefault();
+                if(format == null)
                 {
-                    bool formatFound = false;
-                    foreach(string format in formates)
+                    for(int i = 3; i > 0; i--)
                     {
-                        try
-                        {   //Länge verglichen um IndexOutOfRangeException zu vermeiden
-                            if (line.Length >= format.Length && line.Substring(0, format.Length) == format)
-                            {
-                                #region Überprüfen um was für einen Format-String Befehl es sich handelt
-                                if (format == SettingHelper.Number)
-                                {
-                                    int temp = pgBar.Value + Properties.Settings.Default.startNumber;
-                                    string number = nullvalues(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
-                                    fullname += number;
-                                }
-                                else if (format == SettingHelper.Position)
-                                {
-                                    char a = txtSplit.Text == "\\t" ? '\t' : '\n';
-                                    fullname += SplitLine(row, a, (int) nbPosition.Value);
-                                }
-                                else if(format == SettingHelper.Directory)
-                                {
-                                    fullname += dirName;
-                                }
-                                else //Nummer 1-100
-                                {
-                                    char a = txtSplit.Text == "\\t" ? '\t' : '\n';
-                                    fullname += SplitLine(row, a, Convert.ToInt32(format));
-                                }
-
-                                fullname += line.Substring(format.Length, line.Length - format.Length); //Rest der nach dem %-Befehl steht. Bsp: %nabc also "abc"
-                                #endregion
-
-                                formatFound = true;
-                                break;
-                            }
-                        }
-                        catch (IndexOutOfRangeException)
+                        if(line.Length >= i && int.TryParse(line.Substring(0,i), out int result) && result <= SettingHelper.MaxNumber)
                         {
-                            //Falls eine Position im Format-String nicht existiert
-                            if (!abort)
-                            {
-                                DialogResult? res = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, $"Die Position {nbPosition.Value} mit dem Split-String: {txtSplit.Text} gibt es nicht\nVorgang fortsetzen?");
-
-                                if (res == DialogResult.No)
-                                {
-                                    res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
-                                    if (res == DialogResult.Yes)
-                                        restore();
-                                    throw new AbortException();
-                                }
-                                else
-                                    abort = true;
-                            }
-                                
+                            format = result.ToString();
                         }
                     }
-
-                    if (!formatFound)
-                        fullname += "%" + line;
                 }
 
-                else
-                    fullname += line;
+                if (format != null)
+                {
+                    try
+                    {
+                        #region Überprüfen um was für einen Format-String Befehl es sich handelt
+                        if (format == SettingHelper.Number)
+                        {
+                            int temp = pgBar.Value + Properties.Settings.Default.startNumber;
+                            string number = nullvalues(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
+                            fullname.Append(number);
+                        }
+                        else if (format == SettingHelper.Position)
+                        {
+                            char a = txtSplit.Text == "\\t" ? '\t' : '\n';
+                            fullname.Append(SplitLine(row, a, (int)nbPosition.Value));
+                        }
+                        else if (format == SettingHelper.Directory)
+                        {
+                            fullname.Append(dirName);
+                        }
+                        else //Nummer 1-100
+                        {
+                            char a = txtSplit.Text == "\\t" ? '\t' : '\n';
+                            fullname.Append(SplitLine(row, a, Convert.ToInt32(format)));
+                        }
 
-                firstIndex = false;                        
+                        fullname.Append(line.Substring(format.Length, line.Length - format.Length)); //Rest der nach dem %-Befehl steht. Bsp: %nabc also "abc"
+                        #endregion
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        //Falls eine Position im Format-String nicht existiert
+                        if (!abort)
+                        {
+                            DialogResult? res = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, $"Die Position {nbPosition.Value} mit dem Split-String: {txtSplit.Text} gibt es nicht\nVorgang fortsetzen?");
+
+                            if (res == DialogResult.No)
+                            {
+                                res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
+                                if (res == DialogResult.Yes)
+                                    restore();
+                                throw new AbortException();
+                            }
+                            else
+                            {
+                                abort = true;
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    fullname.Append(SettingHelper.Separator).Append(line);
+                }
+                
+                    
             }
-            return ReplaceSpecialCharacters(fullname);
+            return ReplaceSpecialCharacters(fullname.ToString());
         }
         #endregion
 
