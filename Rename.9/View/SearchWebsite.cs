@@ -111,97 +111,64 @@ namespace Episode_Names.Anisearch
         private List<KeyValuePair<string, string>> getLanguagesWithJapanese()
         {
             List<KeyValuePair<string, string>> languages = getLanguageData();
-            languages.Add(new KeyValuePair<string, string>("ja", "日本語"));
+            addJapanese(languages);
             return languages;
         }
 
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            bool valid = false;
             string language = ((KeyValuePair<string, string>)cmbLanguageEpisodes.SelectedItem).Key;
-            if (cmbWebsite.SelectedIndex == 1 && (valid = checkUrlAnisearch())) //Anisearch
-            {
-                StartProgressBar();
-                string url = txtUrl.Text;
+            int selectedIndex = cmbWebsite.SelectedIndex;
+            string url = txtUrl.Text;
+            string urlTVDB = ((KeyValuePair<string, string>)cmbSeasons.SelectedItem).Key;
+            int season = cmbSeasons.SelectedIndex;
 
-                new Thread(() =>
+            new Thread(() =>
+            {
+                bool valid = false;
+                try
                 {
-                    try
+                    StartProgressBar();
+                    List<string> result = null;
+                    if (selectedIndex == 1 && (valid = checkUrlAnisearch())) //Anisearch
                     {
-                        getEpisodeList(url, language);
+                        result = getEpisodeList(url, language);
+                    }
+                    else if (selectedIndex == 3 && (valid = checkUrlTVDB()))
+                    {
+                        
+                        result = GetEpisodeListTVDB(urlTVDB, language);
+                    }
+                    else if (selectedIndex == 0 && (valid = checkUrlAniDB()))
+                    {
+                        result = getEpisodeListAniDB(url);
+                    }
+                    else if (valid = checkUrlFernsehserien())
+                    {
+                        result = getEpisodeListFernsehserien(url, season);
+                    }
+
+                    episodeList = result;
+
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage(ex);
+                }
+                finally
+                {
+                    StopProgressBar();
+                    if (valid)
+                    {
                         CloseForm();
                     }
-                    catch (Exception e1)
+                    else
                     {
-                        ErrorMessage(e1);
+                        ErrorMessage(new UriFormatException());
                     }
-                }).Start();
-            }
-            else if(cmbWebsite.SelectedIndex == 3 && (valid = checkUrlTVDB()))
-            {
-                StartProgressBar();
-                string url = ((KeyValuePair<string, string>) cmbSeasons.SelectedItem).Key;
-
-                new Thread(() =>
-                {
-                    try
-                    {
-                        getEpisodeListTVDB(url, language);
-                        CloseForm();
-                    }
-                    catch (Exception e1)
-                    {
-                        ErrorMessage(e1);
-                    }
-
-                }).Start();
-            }
-            else if(cmbWebsite.SelectedIndex == 0 && (valid = checkUrlAniDB()))
-            {
-                StartProgressBar();
-                string url = txtUrl.Text;
-
-                new Thread(() =>
-                {
-                    try
-                    {
-                        getEpisodeListAniDB(url);
-                        CloseForm();
-                    }
-                    catch (Exception e1)
-                    {
-                        ErrorMessage(e1);
-                    }
-
-                }).Start();
-            }
-            else if(valid = checkUrlFernsehserien())
-            {
-                StartProgressBar();
-                string url = txtUrl.Text;
-                int season = cmbSeasons.SelectedIndex;
-
-                new Thread(() =>
-                {
-                    try
-                    {
-                        getEpisodeListFernsehserien(url, season);
-                        CloseForm();
-                    }
-                    catch (Exception e1)
-                    {
-                        ErrorMessage(e1);
-                    }
-
-                }).Start();
-            }
-
-            
-            if (!valid)
-            {
-                ErrorMessage(new UriFormatException());
-            }
+                }
+            }).Start();
         }
 
         private bool checkUrlFernsehserien()
@@ -225,14 +192,14 @@ namespace Episode_Names.Anisearch
             return valid;
         }
 
-        private void getEpisodeListFernsehserien(string url, int season)
+        private List<string> getEpisodeListFernsehserien(string url, int season)
         {
 
-            episodeList = new List<string>();
+            List<string>  episodeList = new List<string>();
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
             
-            var tables = doc.DocumentNode.SelectNodes("//table[(@class='episodenliste' or @class='episodenliste-2019')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
+            var tables = doc.DocumentNode.SelectNodes("//table[contains(@class,'episodenliste')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
             int beginCounter = season == 0 ? 0 : season-1;
             int endCounter = season == 0 ? tables.Count - 1 : season-1;
             for (int i = beginCounter; i <= endCounter; i++)
@@ -251,14 +218,15 @@ namespace Episode_Names.Anisearch
                     episodeList.Add(line.Trim());
                 }
             }
+            return episodeList;
         }
 
-        private void getEpisodeListTVDB(string url, string language)
+        private List<string> GetEpisodeListTVDB(string url, string language)
         {
             
             language = language == "com" ? "en" : language;
 
-            episodeList = new List<string>();
+            List<string>  episodeList = new List<string>();
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
 
@@ -294,16 +262,17 @@ namespace Episode_Names.Anisearch
                     }
                 }
             }
+            return episodeList;
         }
 
-        private void getEpisodeListAniDB(string url)
+        private List<string> getEpisodeListAniDB(string url)
         {
 
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
-            
 
-            episodeList = new List<string>();
+
+            List<string> episodeList = new List<string>();
 
             foreach (HtmlNode row in doc.DocumentNode.SelectSingleNode("//table[@id='eplist']//tbody").SelectNodes("tr"))
             {
@@ -329,6 +298,7 @@ namespace Episode_Names.Anisearch
                     episodeList.Add(line.Trim());
                 }
             }
+            return episodeList;
         }
 
         private string getDomain()
@@ -397,22 +367,22 @@ namespace Episode_Names.Anisearch
                 pgLoading.Style = ProgressBarStyle.Blocks;
             }));
 
-            MethodInvoker invoker = delegate
+            
+            BeginInvoke(new MethodInvoker(()=>
             {
                 setEnabled(true);
-            };
-            BeginInvoke(invoker);
+            }));
             
         }
 
 
-        private void getEpisodeList(string url, string language)
+        private List<string> getEpisodeList(string url, string language)
         {
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
             language = language == "com" ? "en" : language;
-            
-            episodeList = new List<string>();
+
+            List<string> episodeList = new List<string>();
             HtmlNode table = doc.DocumentNode.SelectNodes("//table[@class='responsive-table episodes']//tbody")[0];
             foreach (HtmlNode row in table.SelectNodes("tr"))
             {
@@ -434,6 +404,7 @@ namespace Episode_Names.Anisearch
                     episodeList.Add(line.Trim());
                 }
             }
+            return episodeList;
         }
 
 
@@ -441,11 +412,9 @@ namespace Episode_Names.Anisearch
         {
             StopProgressBar();
             DialogResult = DialogResult.OK;
-            MethodInvoker LabelUpdate = delegate
-            {
+            BeginInvoke(new MethodInvoker(()=> {
                 Close();
-            };
-            BeginInvoke(LabelUpdate);
+            }));
         }
 
         private void Anisearch_Table_FormClosing(object sender, FormClosingEventArgs e)
@@ -459,8 +428,13 @@ namespace Episode_Names.Anisearch
 
         private void StartProgressBar()
         {
-            pgLoading.Style = ProgressBarStyle.Marquee;
-            setEnabled(false);
+            pgLoading.GetCurrentParent().BeginInvoke(new MethodInvoker(() => {
+                pgLoading.Style = ProgressBarStyle.Marquee;
+            }));;
+            BeginInvoke(new MethodInvoker(() =>
+            {
+                setEnabled(false);
+            }));
         }
 
         private void setEnabled(bool status)
@@ -476,71 +450,42 @@ namespace Episode_Names.Anisearch
                 
                 string searchText = txtSearch.Text;
                 string domain = getDomain();
-                switch (cmbWebsite.SelectedIndex)
+                int index = cmbWebsite.SelectedIndex;
+                int selectedLanguageIndex = cmbLanguageSearch.SelectedIndex;
+                string selectedLanguage = ((KeyValuePair<string, string>)cmbLanguageSearch.SelectedItem).Key;
+                new Thread(() =>
                 {
-                    case 0: //aniDB
-                        new Thread(() =>
+                    try
+                    {
+                        switch (index)
                         {
-                            try
-                            {
+                            case 0: //aniDB
                                 searchTextAniDB(searchText);
-                            }
-                            catch (Exception exception)
-                            {
-                                ErrorMessage(exception);
-                            }
-                            StopProgressBar();
-                        }).Start();
-                        break;
+                                break;
 
-                    case 1: //Anisearch
-                        new Thread(() =>
-                        {
-                            try
-                            {
+                            case 1: //Anisearch
                                 searchTextAnisearch(getSearchUrlAnisearch(searchText, domain), domain);
-                            }
-                            catch (Exception exception)
-                            {
-                                ErrorMessage(exception);
-                            }
-                            StopProgressBar();
-                        }).Start();
-                        break;
+                                break;
 
-                    case 2: //Fernsehserien.de
-                        new Thread(() =>
-                        {
-                            try
-                            {
+                            case 2: //Fernsehserien.de
                                 searchTextFernsehserien(searchText);
-                            }
-                            catch (Exception exception)
-                            {
-                                ErrorMessage(exception);
-                            }
-                            StopProgressBar();
-                        }).Start();
-                        break;
+                                break;
 
-                    case 3: //TVDB
-
-                        string language = cmbLanguageSearch.SelectedIndex == 0 ? "de" : ((KeyValuePair<string, string>)cmbLanguageSearch.SelectedItem).Key;
-                        new Thread(() =>
-                        {
-                            try
-                            {
+                            case 3: //TVDB
+                                string language = selectedLanguageIndex == 0 ? "de" : selectedLanguage;
                                 searchTextTVDB(searchText, language);
-                            }
-                            catch (Exception exception)
-                            {
-                                ErrorMessage(exception);
-                            }
-                            StopProgressBar();
-                        }).Start();
-                        break;
-
-                }
+                                break;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        ErrorMessage(exception);
+                    }
+                    finally
+                    {
+                        StopProgressBar();
+                    }
+                }).Start();
                 
             }
         }
@@ -578,14 +523,15 @@ namespace Episode_Names.Anisearch
 
         private void searchTextAniDB(string searchText)
         {
-            Uri ur = new Uri($@"https://anidb.net/perl-bin/animedb.pl?adb.search={adjustSearchTextTVDB(searchText)}&show=animelist&do.search=search");
+            string baseUrl = "https://anidb.net/perl-bin/animedb.pl?";
+            Uri ur = new Uri($"{baseUrl}adb.search={adjustSearchTextTVDB(searchText)}&show=animelist&do.search=search");
             List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
 
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(ur.AbsoluteUri);
             
             string url = web.ResponseUri.ToString();
-            if (url.StartsWith("https://anidb.net/perl-bin/animedb.pl?show=anime&aid="))
+            if (url.StartsWith($"{baseUrl}?show=anime&aid="))
             {
                 setUrl(url);
             }
@@ -704,27 +650,24 @@ namespace Episode_Names.Anisearch
             if (listResult.SelectedIndex != -1)
             {
                 string url = ((KeyValuePair<string,string>)listResult.SelectedItem).Key;
-
-                if (cmbWebsite.SelectedIndex == 3) //TVDB
+                StartProgressBar();
+                int selectedIndex = cmbWebsite.SelectedIndex;
+                new Thread(() =>
                 {
-                    StartProgressBar();
-                    new Thread(() =>
+                    if (selectedIndex == 3) //TVDB
                     {
                         getSeasons(url);
-                        StopProgressBar();
-                    }).Start();
-                }
-                else if(cmbWebsite.SelectedIndex == 2) //Fernsehserien
-                {
-                    StartProgressBar();
-                    new Thread(() =>
+                    }
+                    else if (selectedIndex == 2) //Fernsehserien
                     {
                         getSeasonsFernsehserien(url);
-                        StopProgressBar();
-                    }).Start();
-                }
+                    }
+                    StopProgressBar();
 
-                txtUrl.Text = url;
+                    txtUrl.BeginInvoke(new MethodInvoker(()=>{
+                        txtUrl.Text = url;
+                    }));
+                }).Start();
             }
         }
 
@@ -797,33 +740,27 @@ namespace Episode_Names.Anisearch
         private void btnCheckURL_Click(object sender, EventArgs e)
         {
             string url = txtUrl.Text;
-            StartProgressBar();
             bool valid = cmbWebsite.SelectedIndex == 1 && checkUrlAnisearch() || cmbWebsite.SelectedIndex == 0 && checkUrlAniDB();
-            
-            if(cmbWebsite.SelectedIndex == 3 && (valid = checkUrlTVDB())) {
-                new Thread(() =>
-                {
-                    getSeasons(url);
-                    StopProgressBar();
-                }).Start();
-            }
-            else if(cmbWebsite.SelectedIndex == 2 && (valid = checkUrlFernsehserien()))
+            int selectedIndex = cmbWebsite.SelectedIndex;
+            StartProgressBar();
+
+            new Thread(() =>
             {
-                new Thread(() =>
+                if (selectedIndex == 3 && (valid = checkUrlTVDB())) {
+                
+                    getSeasons(url);
+                }
+                else if(selectedIndex == 2 && (valid = checkUrlFernsehserien()))
                 {
                     getSeasonsFernsehserien(url);
-                    StopProgressBar();
-                }).Start();
-            }
-            else
-            {
+                }
+                
                 StopProgressBar();
-            }
-
-            if (!valid)
-            {
-                ErrorMessage(new UriFormatException());
-            }
+                if (!valid)
+                {
+                    ErrorMessage(new UriFormatException());
+                }
+            }).Start();
         }
 
         private bool checkUrlTVDB()

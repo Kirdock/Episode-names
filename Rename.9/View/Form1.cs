@@ -196,7 +196,7 @@ namespace Episode_Names
                 string format = formates.Where(f => line.Length >= f.Length && line.Substring(0, f.Length) == f).OrderBy(f=>f,new StringComparator()).LastOrDefault();
                 if(format == null)
                 {
-                    for(int i = 3; i > 0; i--)
+                    for(int i = 1; i <= SettingHelper.MaxNumber.ToString().Length; i++)
                     {
                         if(line.Length >= i && int.TryParse(line.Substring(0,i), out int result) && result <= SettingHelper.MaxNumber)
                         {
