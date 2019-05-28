@@ -232,7 +232,7 @@ namespace Episode_Names.Anisearch
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
             
-            var tables = doc.DocumentNode.SelectNodes("//table[(@class='episodenliste' or @class='episodenliste-2019')]//tbody[@itemprop='season']");
+            var tables = doc.DocumentNode.SelectNodes("//table[(@class='episodenliste' or @class='episodenliste-2019')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
             int beginCounter = season == 0 ? 0 : season-1;
             int endCounter = season == 0 ? tables.Count - 1 : season-1;
             for (int i = beginCounter; i <= endCounter; i++)
@@ -565,7 +565,7 @@ namespace Episode_Names.Anisearch
             }
             else
             {
-                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//div[@class= 'serie-content-left']/ul/li"))
+                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//article[@class= 'serie-content-left']/ul/li"))
                 {
                     string text = WebUtility.HtmlDecode(entry.SelectSingleNode("a/span[@class='suchergebnis-titel']").InnerText);
                     string nurl = WebUtility.HtmlDecode(entry.SelectSingleNode("a[@href]").Attributes["href"].Value);
