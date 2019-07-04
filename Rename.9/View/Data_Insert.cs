@@ -49,7 +49,7 @@ namespace Episode_Names
         private void setRichTextData(IEnumerable<string> data)
         {
             
-            richTextBox1.Text = string.Join("\n", data);
+            richTextBox1.Text = string.Join("\n", data ?? Enumerable.Empty<string>());
             
             richTextBox1.SelectAll();
             richTextBox1.SelectionFont = richTextBox1.Font;

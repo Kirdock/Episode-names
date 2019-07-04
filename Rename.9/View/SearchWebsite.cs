@@ -135,7 +135,7 @@ namespace Episode_Names.Anisearch
                     {
                         result = getEpisodeList(url, language);
                     }
-                    else if (selectedIndex == 3 && (valid = checkUrlTVDB()))
+                    else if (selectedIndex == 3 && (valid = checkUrlTVDB(url, out url)))
                     {
                         
                         result = GetEpisodeListTVDB(urlTVDB, language);
@@ -144,11 +144,11 @@ namespace Episode_Names.Anisearch
                     {
                         result = getEpisodeListAniDB(url);
                     }
-                    else if (valid = checkUrlFernsehserien())
+                    else if (valid = checkUrlFernsehserien(url, out url))
                     {
                         result = getEpisodeListFernsehserien(url, season);
                     }
-
+                    setUrl(url);
                     episodeList = result;
 
                 }
@@ -171,22 +171,22 @@ namespace Episode_Names.Anisearch
             }).Start();
         }
 
-        private bool checkUrlFernsehserien()
+        private bool checkUrlFernsehserien(string inputUrl, out string url)
         {
             bool valid;
-            string url = txtUrl.Text;
+            url = string.Empty;
             string startText = "https://www.fernsehserien.de/";
-            if (valid = url.StartsWith(startText))
+            if (valid = inputUrl.StartsWith(startText))
             {
-                url = url.Replace(startText, string.Empty);
-                string searchText = url.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                inputUrl = inputUrl.Replace(startText, string.Empty);
+                string searchText = inputUrl.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries)[0];
                 string changedUrl = startText + searchText + "/episodenguide";
                 HtmlWeb htmlWeb = new HtmlWeb();
                 HtmlAgilityPack.HtmlDocument doc = htmlWeb.Load(changedUrl);
 
                 if (valid = doc.DocumentNode.SelectSingleNode("//nav[@id='serienmenu']") != null)
                 {
-                    txtUrl.Text = changedUrl;
+                    url = changedUrl;
                 }
             }
             return valid;
@@ -746,11 +746,11 @@ namespace Episode_Names.Anisearch
 
             new Thread(() =>
             {
-                if (selectedIndex == 3 && (valid = checkUrlTVDB())) {
+                if (selectedIndex == 3 && (valid = checkUrlTVDB(url, out url))) {
                 
                     getSeasons(url);
                 }
-                else if(selectedIndex == 2 && (valid = checkUrlFernsehserien()))
+                else if(selectedIndex == 2 && (valid = checkUrlFernsehserien(url, out url)))
                 {
                     getSeasonsFernsehserien(url);
                 }
@@ -760,17 +760,18 @@ namespace Episode_Names.Anisearch
                 {
                     ErrorMessage(new UriFormatException());
                 }
+                setUrl(url);
             }).Start();
         }
 
-        private bool checkUrlTVDB()
+        private bool checkUrlTVDB(string inputUrl, out string url)
         {
             bool valid = false;
-            string url = txtUrl.Text;
+            url = string.Empty;
             string startText = "https://www.thetvdb.com/series/";
-            if (url.StartsWith(startText))
+            if (inputUrl.StartsWith(startText))
             {
-                string search = url.Replace(startText, string.Empty);
+                string search = inputUrl.Replace(startText, string.Empty);
 
                 if(search.IndexOf("/") != -1)
                 {
@@ -787,11 +788,10 @@ namespace Episode_Names.Anisearch
                         lastStatusCode = response.StatusCode;
                     }
                 };
-                htmlWeb.Load(url);
-                if(lastStatusCode == HttpStatusCode.OK)
+                htmlWeb.Load(inputUrl);
+                if(valid = (lastStatusCode == HttpStatusCode.OK))
                 {
-                    valid = true;
-                    txtUrl.Text = $"{startText}{search}";
+                    url = $"{startText}{search}";
                 }
             }
             return valid;
