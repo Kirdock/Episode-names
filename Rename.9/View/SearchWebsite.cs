@@ -510,7 +510,7 @@ namespace Episode_Names.Anisearch
             }
             else
             {
-                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//article[@class= 'serie-content-left']/ul/li"))
+                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//li[contains(@class,'suchergebnis')]"))
                 {
                     string text = WebUtility.HtmlDecode(entry.SelectSingleNode("a/span[@class='suchergebnis-titel']").InnerText);
                     string nurl = WebUtility.HtmlDecode(entry.SelectSingleNode("a[@href]").Attributes["href"].Value);
