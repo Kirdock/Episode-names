@@ -22,11 +22,12 @@ namespace Episode_Names.Helper
 
         internal static void CheckUpdate(bool Prompt, ProgressBar progressBar)
         {
-            try
+            
+            if (!Prompt || !Properties.Settings.Default.UpdateDialogShowed)
             {
-                if (!Prompt || !Properties.Settings.Default.UpdateDialogShowed)
+                new Thread(() =>
                 {
-                    new Thread(() =>
+                    try
                     {
                         WebRequest request = WebRequest.Create(Tags);
                         WebResponse response = request.GetResponse();
@@ -59,12 +60,12 @@ namespace Episode_Names.Helper
                         {
                             MessageHandler.MessagesOK(MessageBoxIcon.Information, "Sie besitzen bereits die aktuellste Version");
                         }
-                    }).Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorHelper.LogMessage(ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorHelper.LogMessage(ex);
+                    }
+                }).Start();
             }
         }
 
