@@ -48,7 +48,7 @@
             this.BtnCollapse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnCollapse.UseVisualStyleBackColor = false;
             this.BtnCollapse.Visible = false;
-            this.BtnCollapse.Click += new System.EventHandler(this.btnCollapse_Click);
+            this.BtnCollapse.Click += new System.EventHandler(this.BtnCollapse_Click);
             // 
             // groupBox1
             // 

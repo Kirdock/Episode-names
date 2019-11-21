@@ -14,7 +14,9 @@ namespace Episode_Names.View
     [Designer(typeof(CollapseGroupBoxDesigner))]
     public partial class CollapseGroupBox : UserControl
     {
+        public event EventHandler<bool> CollapseChanged;
         private readonly int MinHeight = 20;
+        private int BoxHeight;
         public string BoxText
         {
             get
@@ -41,19 +43,27 @@ namespace Episode_Names.View
         public CollapseGroupBox()
         {
             InitializeComponent();
+            BtnCollapse.Click += (sender, e) => CollapseChanged?.Invoke(sender, true);
+            BtnEllapse.Click += (sender, e) => CollapseChanged?.Invoke(sender, false);
         }
 
-        private void btnCollapse_Click(object sender, EventArgs e)
+        private void BtnCollapse_Click(object sender, EventArgs e)
         {
-            groupBox1.Dock = DockStyle.Fill;
+            MaximumSize = new Size(Width, BoxHeight);
+            Height = BoxHeight;
             BtnCollapse.Visible = false;
             BtnEllapse.Visible = true;
+            Parent.Height += BoxHeight - MinHeight;
         }
 
         private void BtnEllapse_Click(object sender, EventArgs e)
         {
-            groupBox1.Dock = DockStyle.None;
-            groupBox1.Height = MinHeight;
+            BoxHeight = Height;
+            Height = MinHeight;
+            MaximumSize = new Size(Width, Height);
+            MinimumSize = MaximumSize;
+            
+            Parent.Height -= BoxHeight - MinHeight;
             BtnEllapse.Visible = false;
             BtnCollapse.Visible = true;
         }

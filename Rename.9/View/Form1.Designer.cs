@@ -48,7 +48,6 @@
             this.sucheAufWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnBrowseFolder = new System.Windows.Forms.Button();
             this.lblPosition = new System.Windows.Forms.Label();
             this.pgBar = new System.Windows.Forms.ProgressBar();
@@ -148,8 +147,7 @@
             this.insertDataToolStripMenuItem,
             this.sucheAufWebsiteToolStripMenuItem,
             this.searchReplaceToolStripMenuItem,
-            this.updateToolStripMenuItem,
-            this.testFormToolStripMenuItem});
+            this.updateToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(722, 24);
@@ -250,13 +248,6 @@
             this.updateToolStripMenuItem.Text = "Update";
             this.updateToolStripMenuItem.Click += new System.EventHandler(this.updateToolStripMenuItem_Click);
             // 
-            // testFormToolStripMenuItem
-            // 
-            this.testFormToolStripMenuItem.Name = "testFormToolStripMenuItem";
-            this.testFormToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.testFormToolStripMenuItem.Text = "TestForm";
-            this.testFormToolStripMenuItem.Click += new System.EventHandler(this.testFormToolStripMenuItem_Click);
-            // 
             // btnBrowseFolder
             // 
             this.btnBrowseFolder.Location = new System.Drawing.Point(635, 46);
@@ -352,6 +343,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 290);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(722, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 34;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -377,6 +369,9 @@
             // 
             // collapseGroupBox1
             // 
+            this.collapseGroupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.collapseGroupBox1.BoxText = "Formatierung";
             this.collapseGroupBox1.Location = new System.Drawing.Point(0, 120);
             this.collapseGroupBox1.Name = "collapseGroupBox1";
@@ -385,6 +380,9 @@
             // 
             // collapseGroupBox1.WorkingArea
             // 
+            this.collapseGroupBox1.WorkingArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.collapseGroupBox1.WorkingArea.Controls.Add(this.groupBox1);
             this.collapseGroupBox1.WorkingArea.Controls.Add(this.label9);
             this.collapseGroupBox1.WorkingArea.Controls.Add(this.txtFormat);
@@ -396,6 +394,7 @@
             this.collapseGroupBox1.WorkingArea.TabIndex = 1;
             this.collapseGroupBox1.WorkingArea.TabStop = false;
             this.collapseGroupBox1.WorkingArea.Text = "Formatierung";
+            this.collapseGroupBox1.CollapseChanged += new System.EventHandler<bool>(this.collapseGroupBox1_CollapseChanged_1);
             // 
             // groupBox1
             // 
@@ -407,7 +406,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Location = new System.Drawing.Point(465, 11);
+            this.groupBox1.Location = new System.Drawing.Point(465, 20);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(249, 120);
             this.groupBox1.TabIndex = 57;
@@ -555,7 +554,7 @@
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.txtSearch);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -612,7 +611,6 @@
         private System.ComponentModel.BackgroundWorker HistoryWorker;
         private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ToolStripMenuItem testFormToolStripMenuItem;
         private View.CollapseGroupBox collapseGroupBox1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label8;

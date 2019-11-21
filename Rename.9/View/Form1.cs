@@ -2,6 +2,7 @@
 using Episode_Names.Exceptions;
 using Episode_Names.Helper;
 using Episode_Names.View;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -297,12 +298,17 @@ namespace Episode_Names
         #region Button-Browse Klick
         private void btnBrowseFolder_Click(object sender, EventArgs e)
         {
-            FileFolderDialog dialog = new FileFolderDialog();
-            dialog.ShowDialog(txtPath.Text);
-            if (dialog.SelectedPath() != string.Empty)
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
             {
-                txtPath.Text = dialog.SelectedPath();
+                IsFolderPicker = true,
+                InitialDirectory = txtPath.Text
+            };
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                txtPath.Text = dialog.FileName;
             }
+            dialog.Dispose();
         }
         #endregion
 
@@ -844,10 +850,9 @@ namespace Episode_Names
         }
         #endregion
 
-        private void testFormToolStripMenuItem_Click(object sender, EventArgs e)
+        private void collapseGroupBox1_CollapseChanged_1(object sender, bool isCollapsed)
         {
-            TestForm form = new TestForm();
-            form.Show();
+
         }
     }
 }
