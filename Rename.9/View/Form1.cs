@@ -1,6 +1,7 @@
 ﻿using Episode_Names.Anisearch;
 using Episode_Names.Exceptions;
 using Episode_Names.Helper;
+using Episode_Names.View;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,22 +17,17 @@ namespace Episode_Names
 {
     public partial class Form1 : Form
     {
-        #region Variablen
-        List<string> oldData;
-        List<string> newData; //old- und newData wird für "Restore" benötigt; um die alten Filenamen wiederherzustelen muss man auch den neuen wissen
-        List<string> data;
-        bool abort;
-        #endregion
-
+        private readonly HistoryHelper History = new HistoryHelper();
+        private List<string> Data;
+        private bool abort;
 
         public Form1()
         {
             InitializeComponent();
-            setData();
+            SetData();
         }
 
-        #region Standard und gespeicherte Daten setzen
-        private void setData()
+        private void SetData()
         {
             txtPath.Text = Properties.Settings.Default.BrowseLocation;
             nbPosition.Value = Properties.Settings.Default.position;
@@ -39,17 +35,16 @@ namespace Episode_Names
             TopMost = Properties.Settings.Default.Foreground;
             txtSearch.Text = Properties.Settings.Default.SR_Search;
             pgBar.Value = cmbOption.SelectedIndex = 0;
-            txtMessage.Text = "";
+            LblMessage.Text = string.Empty;
             abort = false;
             Updater.CheckUpdate(true, pgBar);
         }
-        #endregion
 
 
         #region Auswahl zwischen vier Methoden (Rename, Insert/Delete Position, Replace) (Kommt drauf an was in der cmbBox angegeben und ob diese visible ist)
         private void Rename_Click(object sender, EventArgs e)
         {
-            initNew();
+            SetStatusMessage(string.Empty);
             if (cmbOption.Visible && cmbOption.SelectedIndex == 0)
             {
                 btnRename_Click();
@@ -62,22 +57,10 @@ namespace Episode_Names
         }
         #endregion
 
-
-        #region Standardwerte für Message, Progressbar und alte/neue Daten setzen
-        private void initNew()
-        {
-            txtMessage.Text = "";
-            pgBar.Value = 0;
-            oldData = new List<string>();
-            newData = new List<string>();
-        }
-        #endregion
-
-
         #region Button "Rename"-Klick. Überprüfen welche Kategorie (OnlyNumber, Anzahl der Datensätze stimmen mit Dateien im Ordner überein)
         private void btnRename_Click()
         {
-            if (data != null || Properties.Settings.Default.OnlyNumber)
+            if (Data != null || Properties.Settings.Default.OnlyNumber)
             {
                 try
                 {
@@ -85,56 +68,47 @@ namespace Episode_Names
                     if (Properties.Settings.Default.OnlyNumber)
                     {
                         renameWithoutData_Click(true);
-                        txtMessage.Text = "Finished!!";
+                        SetStatusMessage("Abgeschlossen!!");
                         return;
                     }
                     #endregion
 
-                    List<FileInfo> infos = new List<FileInfo>(new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
-                    infos.Sort(new StringComparator());
-                    int countFileLines = data?.Count ?? 0;
-                    pgBar.Maximum = infos.Count;
-                    DialogResult? result = null;
+                    List<FileInfo> infos = new DirectoryInfo(txtPath.Text).GetFiles().Select(f => f).Where(f => (f.Attributes & FileAttributes.Hidden) == 0).OrderBy(field => field,new StringComparator()).ToList();
+                    int countFileLines = Data?.Count ?? 0;
+                    StartLoadingBar(infos.Count);
+                    DialogResult result = DialogResult.Yes;
 
-                    
-
-                    #region Überprüfen ob Datensätze mit Dateianzahl übereinstimmt
                     if (infos.Count > countFileLines)
+                    {
                         result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich mehr Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
+                    }
 
                     else if (infos.Count < countFileLines)
-                        result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich weniger Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
-                    #endregion
-
-                    if (result == DialogResult.Yes || result == null)
                     {
-                        RenameFiles(infos);
-                        txtMessage.Text = "Finished!!";
+                        result = MessageHandler.MessagesYesNo(MessageBoxIcon.Exclamation, "Im Ordner befinden sich weniger Dateien als Zeilen im File-Dokument.\nVorgang trotzdem fortsetzen?");
                     }
 
-                }
-
-
-                catch (IOException)
-                {
-                    DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
                     if (result == DialogResult.Yes)
                     {
-                        restore();
+                        RenameFiles(infos);
+                        SetStatusMessage("Abgeschlossen!!");
+                    }
+
+                }
+                catch (IOException)
+                {
+                    DialogResult result = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nAlte Daten wiederherstellen?");
+                    if (result == DialogResult.Yes)
+                    {
+                        GoBack();
                     }
                 }
-
-        
-
-                finally
-                {
-                    pgBar.Value = pgBar.Maximum;
-                }
-
-               
+                StopLoadingBar();
             }
             else
-                MessageHandler.MessagesOK(MessageBoxIcon.Exclamation,"Es wurden keine Daten gesetzt");
+            {
+                MessageHandler.MessagesOK(MessageBoxIcon.Exclamation, "Es wurden keine Daten gesetzt");
+            }
                  
         }
 
@@ -144,34 +118,26 @@ namespace Episode_Names
         #region Anpassen des Format-Strings und Umbenennen der Dateien
         private void RenameFiles(List<FileInfo> infos)
         {
+            List<HistoryHelper.HistoryEntry> history = new List<HistoryHelper.HistoryEntry>();
+            int max = Math.Min(infos.Count, Data.Count);
             try
             {
-                foreach(FileInfo info in infos)
+                for(int i = 0; i < max; i++)
                 {
-                    if (data.Count > pgBar.Value)
-                    {
-                        #region Anpassen des Format-Strings
-                        string absolutePath = Path.Combine(info.DirectoryName, FormatString(data[pgBar.Value], info.Directory.Name) + info.Extension);
-                        #endregion
+                    string absolutePath = Path.Combine(infos[i].DirectoryName, FormatString(Data[i], infos[i].Directory.Name) + infos[i].Extension);
 
-                        if (info.FullName != absolutePath)
-                        {
-                            File.Move(info.FullName, absolutePath);
-                            oldData.Add(info.FullName);
-                            newData.Add(absolutePath);
-                        }
+                    if (infos[i].FullName != absolutePath)
+                    {
+                        File.Move(infos[i].FullName, absolutePath);
+                        history.Add( new HistoryHelper.HistoryEntry(infos[i].FullName,absolutePath));
                     }
-                    pgBar.Value++;
                 }
             }
             catch (AbortException)
             {
                 //  Wurde nur als Abort-Bedingung geworfen
             }
-            catch (IndexOutOfRangeException)
-            {
-
-            }
+            History.Add(history);
         }
         #endregion
 
@@ -193,7 +159,10 @@ namespace Episode_Names
 
             foreach (string line in text)
             {
-                string format = formates.Where(f => line.Length >= f.Length && line.Substring(0, f.Length) == f).OrderBy(f=>f,new StringComparator()).LastOrDefault();
+                string format = formates
+                                .Where(f => line.Length >= f.Length && line.Substring(0, f.Length) == f)
+                                .OrderBy(f=>f,new StringComparator())
+                                .LastOrDefault();
                 if(format == null)
                 {
                     for(int i = 1; i <= SettingHelper.MaxNumber.ToString().Length; i++)
@@ -213,7 +182,7 @@ namespace Episode_Names
                         if (format == SettingHelper.Number)
                         {
                             int temp = pgBar.Value + Properties.Settings.Default.startNumber;
-                            string number = nullvalues(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
+                            string number = NullCharacters(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
                             fullname.Append(number);
                         }
                         else if (format == SettingHelper.Position)
@@ -245,7 +214,7 @@ namespace Episode_Names
                             {
                                 res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
                                 if (res == DialogResult.Yes)
-                                    restore();
+                                    GoBack();
                                 throw new AbortException();
                             }
                             else
@@ -253,15 +222,12 @@ namespace Episode_Names
                                 abort = true;
                             }
                         }
-
                     }
                 }
                 else
                 {
                     fullname.Append(SettingHelper.Separator).Append(line);
-                }
-                
-                    
+                }  
             }
             return ReplaceSpecialCharacters(fullname.ToString());
         }
@@ -270,27 +236,11 @@ namespace Episode_Names
         
 
         #region Format-String anpassen (mit nur %n)
-        private string FormatString()
+        private string FormatNumberString()
         {
-            string[] text = Properties.Settings.Default.formatString.Split(new string[] { "%" }, StringSplitOptions.RemoveEmptyEntries);
-
-            string fullname = "";
-
-            foreach (string line in text)
-            {
-                if (line.Substring(0, 1).Equals("n"))
-                {
-                    int temp = pgBar.Value + Properties.Settings.Default.startNumber;
-                    string number = nullvalues(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
-                    fullname += number;
-                    fullname += line.Substring(1, line.Length - 1);
-                }
-                else
-                    fullname += ((!text[0].Equals(line)) ? ("%" + line) : line);
-               
-
-            }
-            return fullname;
+            int temp = pgBar.Value + Properties.Settings.Default.startNumber;
+            string number = NullCharacters(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
+            return Properties.Settings.Default.formatString.Replace(SettingHelper.Separator + SettingHelper.Number, number);
         }
         #endregion
 
@@ -298,11 +248,9 @@ namespace Episode_Names
         #region Textline wird nach Split-String gesplittet, Position wird rausgeholt und Sonderzeichen werden ersetzt
         private string SplitLine(string line, char a, int position)
         {
-            string erg = (a.Equals('\n')) ?
-                            line.Split(txtSplit.Text.Split(
-                                    new string[] { "|" }, StringSplitOptions.None), StringSplitOptions.RemoveEmptyEntries
-                                    )[position - 1] :
-                            line.Split(new char[] { a }, StringSplitOptions.RemoveEmptyEntries)[position - 1];
+            string erg = a == '\n' ?
+                        line.Split(txtSplit.Text.Split(new string[] { "|" }, StringSplitOptions.None), StringSplitOptions.RemoveEmptyEntries)[position - 1]
+                        : line.Split(new char[] { a }, StringSplitOptions.RemoveEmptyEntries)[position - 1];
             
             return ReplaceSpecialCharacters(erg);
         }
@@ -324,71 +272,24 @@ namespace Episode_Names
         }
         #endregion
 
-
-        #region Button-Restore Klick
-        private void btnRestore_Click(object sender, EventArgs e)
+        
+        private void SetStatusMessage(string text)
         {
-            txtMessage.Text = "";
-            restore();
+            LblMessage.Text = text;
         }
-        #endregion
 
-
-        #region Zurücksetzen der Daten
-        private void restore()
-        {
-            pgBar.Value = 0;
-            if (oldData != null)
-            {
-                try
-                {
-                    pgBar.Maximum = oldData.Count;
-                    for (int count = oldData.Count - 1; count >= 0; count--)
-                    {
-                        File.Move(newData[count], oldData[count]);
-                        pgBar.Value++;
-                    }
-                    oldData = null;
-                    newData = null;
-                    txtMessage.Text += "Restored!";
-                }
-                catch (IOException)
-                {
-                    MessageHandler.MessagesOK(MessageBoxIcon.Error, "Restore nicht möglich, da eine Datei den alten Namen einer anderen Datei besitzt.");
-                }
-
-                catch (Exception e1)
-                {
-                    ErrorHelper.HandleException(e1);
-                }
-                finally
-                {
-                    pgBar.Value = pgBar.Maximum;
-                }
-            }
-            else
-            {
-                MessageHandler.MessagesOK(MessageBoxIcon.Exclamation, "Es sind keine Daten zum Wiederherstellen vorhanden");
-            }
-        }
-        #endregion
-
-
-        #region button-Number Klick
         private void bntNumber_Click(object sender, EventArgs e)
         {
-            initNew();
+            SetStatusMessage(string.Empty);
             renameWithoutData_Click(null);
         }
-        #endregion
 
 
         #region Zurückgeben der 0er, welche vor einer Zahl aufgrund der Anzahl der Dateien fehlen
-        private string nullvalues(int max, int current)
+        private string NullCharacters(int max, int current)
         {
-            int erg = max.ToString().Length - current.ToString().Length;
-
-            return new String('0', erg);
+            int result = max.ToString().Length - current.ToString().Length;
+            return new string('0', result);
         }
         #endregion
 
@@ -398,8 +299,10 @@ namespace Episode_Names
         {
             FileFolderDialog dialog = new FileFolderDialog();
             dialog.ShowDialog(txtPath.Text);
-            if (!dialog.SelectedPath().Equals(""))
+            if (dialog.SelectedPath() != string.Empty)
+            {
                 txtPath.Text = dialog.SelectedPath();
+            }
         }
         #endregion
 
@@ -408,10 +311,11 @@ namespace Episode_Names
         private void insertDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Data_Insert form = new Data_Insert();
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                data = string.IsNullOrWhiteSpace(form.getData()) ? null : form.getData().Split('\n').ToList();
-
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                Data = string.IsNullOrWhiteSpace(form.getData()) ? null : form.getData().Split('\n').ToList();
+            }
+            form.Dispose();
         }
         #endregion
 
@@ -419,12 +323,14 @@ namespace Episode_Names
         #region ButtonEdit_Data Klick. Aufrufen der Form mit den gespeicherten Daten
         private void editDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (data != null)
+            if (Data != null)
             {
-                startData_Insert(data);
+                startData_Insert(Data);
             }
             else
+            {
                 MessageHandler.MessagesOK(MessageBoxIcon.Error, "Es sind keine Daten vorhanden, welche bearbeitet werden können");
+            }
         }
         #endregion
 
@@ -433,12 +339,10 @@ namespace Episode_Names
         private void startData_Insert(IEnumerable<string> data)
         {
             Data_Insert form = new Data_Insert(data);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                this.data = form.getData().Split('\n').ToList();
+                Data = form.getData().Split('\n').ToList();
             }
-
         }
         #endregion
 
@@ -485,10 +389,10 @@ namespace Episode_Names
         private void anisearchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Anisearch_Table form = new Anisearch_Table();
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK){
+            if (form.ShowDialog() == DialogResult.OK){
                 startData_Insert(form.getData());
             }
+            form.Dispose();
         }
         #endregion
 
@@ -496,27 +400,18 @@ namespace Episode_Names
         #region Einstellungen
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form_Settings form = new Form_Settings(this);
-            DialogResult result = form.ShowDialog();
-            switch (result)
+            Form_Settings form = new Form_Settings();
+            switch (form.ShowDialog())
             {
-                #region Factory-Settings
-
                 case DialogResult.Retry:
-                    setData();
+                    SetData();
                     break;
-
-                #endregion
-
-                #region Foreground-Setting
 
                 case DialogResult.Yes:
                     TopMost = Properties.Settings.Default.Foreground;
                     break;
-
-                #endregion
-
             }
+            form.Dispose();
         }
 
         #endregion
@@ -590,20 +485,20 @@ namespace Episode_Names
             
 
             pgBar.Maximum = infos.Count;
-
+            List<HistoryHelper.HistoryEntry> history = new List<HistoryHelper.HistoryEntry>();
             try
             {
                 foreach (FileInfo info in infos)
                 {
                     #region Anpassen des Format-Strings nach "Number", "Only %n" "Delete", "Insert" oder "Replace"
                     string absolutePath = info.DirectoryName + "\\";
-                    string filename = info.Name.Replace(info.Extension, "");
+                    string filename = info.Name.Replace(info.Extension, string.Empty);
 
                     #region Button "Number" wurde geklickt
                     if (numberClicked == null)
                     {
                         int temp = pgBar.Value + Properties.Settings.Default.startNumber;
-                        string number = nullvalues(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp);
+                        string number = NullCharacters(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp);
                         number += temp;
                         absolutePath += number;
                     }
@@ -612,7 +507,7 @@ namespace Episode_Names
                     #region Im FormatString ist der einzige Befehl %n
                     else if (numberClicked == true)
                     {
-                        absolutePath += ReplaceSpecialCharacters(FormatString());
+                        absolutePath += ReplaceSpecialCharacters(FormatNumberString());
                     }
                     #endregion
 
@@ -645,24 +540,23 @@ namespace Episode_Names
 
                     #endregion
 
-                    if (!info.FullName.Equals(absolutePath))
+                    if (info.FullName != absolutePath)
                     {
                         File.Move(info.FullName, absolutePath);
-                        oldData.Add(info.FullName);
-                        newData.Add(absolutePath);
+                        history.Add(new HistoryHelper.HistoryEntry(info.FullName, absolutePath));
                     }
 
                     pgBar.Value++;
 
                 }
-                txtMessage.Text = "Finished!!";
+                LblMessage.Text = "Abgeschlossen!!";
             }
             catch (IOException)
             {
                 DialogResult? result = MessageHandler.MessagesYesNo(MessageBoxIcon.Error, "Umbenennen nicht möglich, da sich schon eine Datei mit gleichen Namen im Ordner befindet.\nRestore durchführen?");
 
                 if (result == DialogResult.Yes)
-                    restore();
+                    GoBack();
             }
             catch (AbortException)
             {
@@ -676,6 +570,7 @@ namespace Episode_Names
             {
                 pgBar.Value = pgBar.Maximum;
             }
+            History.Add(history);
         }
         #endregion
 
@@ -683,9 +578,7 @@ namespace Episode_Names
         #region Position an angegebener Stelle einfügen
         private string InsertPosition(string filename)
         {
-            filename = filename.Insert((int)(nbPosition.Value - 1), txtSplit.Text);
-
-            return filename;
+            return filename.Insert((int)(nbPosition.Value - 1), txtSplit.Text);
         }
         #endregion
 
@@ -694,7 +587,7 @@ namespace Episode_Names
         private string DeletePositions(string filename)
         {
             HashSet<int> positions = getPositions();
-            var builder = new System.Text.StringBuilder(filename);
+            var builder = new StringBuilder(filename);
             
             foreach (int position in positions.OrderByDescending(o => o))
             {
@@ -712,7 +605,7 @@ namespace Episode_Names
                         {
                             res = MessageHandler.MessagesYesNo(MessageBoxIcon.Question, "Restore ausführen?");
                             if (res == DialogResult.Yes)
-                                restore();
+                                GoBack();
                             throw new AbortException();
                         }
                         else
@@ -730,33 +623,35 @@ namespace Episode_Names
         private HashSet<int> getPositions()
         {
             HashSet<int> positions = new HashSet<int>(); //HashSet wegen Sortierung und keine Duplikate
-            List<string> stpositions = txtSplit.Text.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            IEnumerable<string> stpositions = txtSplit.Text.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
 
             foreach (string position in stpositions)
             {
                 List<string> arrpos = position.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                int start = Convert.ToInt32(arrpos[0].Trim());
-                if (arrpos.Count == 1)
+                if(int.TryParse(arrpos[0].Trim(), out int start))
                 {
-                    positions.Add(start);
-                }
-                else
-                {
-                    int secondNumber = Convert.ToInt32(arrpos[1].Trim());
-                    int count = secondNumber - start;
-
-                    if (arrpos.Count == 2 && secondNumber >= start)
+                    if (arrpos.Count == 1)
                     {
-                        foreach(int pos in Enumerable.Range(start, count + 1))
-                            positions.Add(pos);
+                        positions.Add(start);
                     }
-
+                    else if (arrpos.Count == 2 && int.TryParse(arrpos[1].Trim(), out int secondNumber) && secondNumber >= start)
+                    {
+                        int count = secondNumber - start;
+                        foreach (int pos in Enumerable.Range(start, count + 1))
+                        {
+                            positions.Add(pos);
+                        }
+                    }
                     else
                     {
                         throw new InvalidOperationException();
                     }
+                }
+                else
+                {
+                    throw new InvalidOperationException();
                 }
             }
             
@@ -804,18 +699,15 @@ namespace Episode_Names
         private void txtSplit_Leave(object sender, EventArgs e)
         {
             if (cmbOption.Visible && cmbOption.SelectedIndex == 0)
+            {
                 Properties.Settings.Default.splitString = txtSplit.Text;
+            }
         }
         #endregion
 
         private void updateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Updater.CheckUpdate(false, pgBar);
-        }
-
-        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/Kirdock/Episode-names/releases");
         }
 
         private void ordnernamenHolenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -829,6 +721,133 @@ namespace Episode_Names
             {
                 ErrorHelper.HandleException(e1);
             }
+        }
+
+        #region History
+
+        private void GoBack_Click(object sender, EventArgs e)
+        {
+            GoBack();
+        }
+
+        private void GoForward_Click(object sender, EventArgs e)
+        {
+            GoForward();
+        }
+
+        private void GoForward()
+        {
+            if (History.Forward(out List<HistoryHelper.HistoryEntry> result))
+            {
+                HistoryWorker.RunWorkerAsync(result);
+            }
+        }
+
+        private void GoBack()
+        {
+            if (History.Back(out List<HistoryHelper.HistoryEntry> result))
+            {
+                HistoryWorker.RunWorkerAsync(result);
+            }
+        }
+
+        private void HistoryWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            object[] arguments = (object[])e.Argument;
+            List<HistoryHelper.HistoryEntry> history = arguments[0] as List<HistoryHelper.HistoryEntry>;
+            bool forceRename = (bool)arguments[1];
+            StartLoadingBar(history.Count);
+            if (forceRename || history.All(item => File.Exists(item.OldValue)))
+            {
+                RenameByHistory(history);
+            }
+            else
+            {
+                DialogResult result = MessageHandler.MessagesYesNo(MessageBoxIcon.Warning, "Es konnten nicht alle Dateien gefunden werden.\nTrotzdem ausführen?");
+                if (result == DialogResult.OK)
+                {
+                    RenameByHistory(history);
+                }
+            }
+
+
+            void RenameByHistory(List<HistoryHelper.HistoryEntry> historyEntry)
+            {
+                foreach (HistoryHelper.HistoryEntry entry in historyEntry)
+                {
+                    if (File.Exists(entry.OldValue))
+                    {
+                        File.Move(entry.OldValue, entry.NewValue);
+                    }
+                    HistoryWorker.ReportProgress(0);
+                }
+            }
+        }
+
+        private void HistoryWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            UpdateLoadingBar();
+        }
+
+        private void HistoryWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if(e.Error != null)
+            {
+                if(e.Error is IOException)
+                {
+                    MessageHandler.MessagesOK(MessageBoxIcon.Error, "Wiederherstellen nicht möglich, da eine Datei den alten Namen einer anderen Datei besitzt.");
+                }
+                else
+                {
+                    ErrorHelper.HandleException(e.Error);
+                }
+            }
+            else
+            {
+                SetStatusMessage("Wiederhergestellt!");
+            }
+            StopLoadingBar();
+        }
+        #endregion
+
+        #region ProgressBar
+        private void StartLoadingBar(int max)
+        {
+            pgBar.BeginInvoke(new MethodInvoker(() =>
+            {
+                pgBar.Style = ProgressBarStyle.Continuous;
+                pgBar.Value = 0;
+                pgBar.Maximum = max;
+            }));
+        }
+
+        private void StartLoadingBar()
+        {
+            pgBar.BeginInvoke(new MethodInvoker(() =>
+            {
+                pgBar.Style = ProgressBarStyle.Marquee;
+            }));
+        }
+
+        private void UpdateLoadingBar()
+        {
+            if (pgBar.Value < pgBar.Maximum)
+            {
+                pgBar.Value++;
+            }
+        }
+
+        private void StopLoadingBar()
+        {
+            pgBar.Value = pgBar.Maximum = 0;
+            pgBar.Style = ProgressBarStyle.Continuous;
+        }
+        #endregion
+
+        private void testFormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TestForm form = new TestForm();
+            form.Show();
         }
     }
 }

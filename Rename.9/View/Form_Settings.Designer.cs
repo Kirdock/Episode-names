@@ -33,8 +33,9 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.chbForeground = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.btnFacSet = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -48,10 +49,7 @@
             this.nbNumber = new System.Windows.Forms.NumericUpDown();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.rtbChangelog = new System.Windows.Forms.RichTextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
+            this.GitHubLink = new System.Windows.Forms.LinkLabel();
             this.tabPage3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbNumber)).BeginInit();
@@ -78,14 +76,13 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 3;
-            this.btnSave.Text = "Save";
+            this.btnSave.Text = "Speichern";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.chbForeground);
-            this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Location = new System.Drawing.Point(100, 4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -97,22 +94,14 @@
             // chbForeground
             // 
             this.chbForeground.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chbForeground.AutoSize = true;
-            this.chbForeground.Location = new System.Drawing.Point(386, 8);
+            this.chbForeground.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chbForeground.Location = new System.Drawing.Point(6, 8);
             this.chbForeground.Name = "chbForeground";
-            this.chbForeground.Size = new System.Drawing.Size(15, 14);
+            this.chbForeground.Size = new System.Drawing.Size(409, 17);
             this.chbForeground.TabIndex = 1;
+            this.chbForeground.Text = "Immer im Vordergrund";
             this.chbForeground.UseVisualStyleBackColor = true;
             this.chbForeground.CheckedChanged += new System.EventHandler(this.ValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 13);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(111, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Always in Foreground:";
             // 
             // tabPage2
             // 
@@ -137,6 +126,24 @@
             this.tabPage2.Text = "Allgemein";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(123, 173);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(26, 13);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "%dir";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(11, 173);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 13);
+            this.label11.TabIndex = 16;
+            this.label11.Text = "Ordnername";
+            // 
             // btnFacSet
             // 
             this.btnFacSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -144,7 +151,7 @@
             this.btnFacSet.Name = "btnFacSet";
             this.btnFacSet.Size = new System.Drawing.Size(94, 23);
             this.btnFacSet.TabIndex = 15;
-            this.btnFacSet.Text = "Factory Settings";
+            this.btnFacSet.Text = "Werkeinstellungen";
             this.btnFacSet.UseVisualStyleBackColor = true;
             this.btnFacSet.Click += new System.EventHandler(this.btnFacSet_Click);
             // 
@@ -234,7 +241,7 @@
             // nbNumber
             // 
             this.nbNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nbNumber.Location = new System.Drawing.Point(336, 11);
+            this.nbNumber.Location = new System.Drawing.Point(126, 11);
             this.nbNumber.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -272,60 +279,25 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.rtbChangelog);
-            this.tabPage1.Controls.Add(this.label10);
+            this.tabPage1.Controls.Add(this.GitHubLink);
             this.tabPage1.Location = new System.Drawing.Point(100, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(430, 353);
             this.tabPage1.TabIndex = 3;
-            this.tabPage1.Text = "Changelog";
+            this.tabPage1.Text = "Infos";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // rtbChangelog
+            // GitHubLink
             // 
-            this.rtbChangelog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbChangelog.BackColor = System.Drawing.SystemColors.Window;
-            this.rtbChangelog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbChangelog.Location = new System.Drawing.Point(6, 33);
-            this.rtbChangelog.Name = "rtbChangelog";
-            this.rtbChangelog.ReadOnly = true;
-            this.rtbChangelog.Size = new System.Drawing.Size(416, 285);
-            this.rtbChangelog.TabIndex = 1;
-            this.rtbChangelog.Text = "";
-            this.rtbChangelog.WordWrap = false;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.label10.Location = new System.Drawing.Point(3, 3);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(108, 25);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "Changelog";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 173);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(65, 13);
-            this.label11.TabIndex = 16;
-            this.label11.Text = "Ordnername";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(123, 173);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(26, 13);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "%dir";
+            this.GitHubLink.AutoSize = true;
+            this.GitHubLink.Location = new System.Drawing.Point(6, 5);
+            this.GitHubLink.Name = "GitHubLink";
+            this.GitHubLink.Size = new System.Drawing.Size(63, 13);
+            this.GitHubLink.TabIndex = 0;
+            this.GitHubLink.TabStop = true;
+            this.GitHubLink.Text = "GitHub Link";
+            this.GitHubLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitHubLink_LinkClicked);
             // 
             // Form_Settings
             // 
@@ -339,10 +311,9 @@
             this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "Form_Settings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Settings";
+            this.Text = "Einstellungen";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Settings_FormClosing);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbNumber)).EndInit();
@@ -358,8 +329,9 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.CheckBox chbForeground;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnFacSet;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label6;
@@ -373,9 +345,6 @@
         private System.Windows.Forms.NumericUpDown nbNumber;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.RichTextBox rtbChangelog;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.LinkLabel GitHubLink;
     }
 }

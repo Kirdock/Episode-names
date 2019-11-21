@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Episode-Names", "Rename.9\Episode-Names.csproj", "{A160D918-3D16-4847-A82C-95DE036BFBC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "CustomControls\CustomControls.csproj", "{EB7B570B-C0AC-493E-9E48-34647FAACE41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{A160D918-3D16-4847-A82C-95DE036BFBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A160D918-3D16-4847-A82C-95DE036BFBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A160D918-3D16-4847-A82C-95DE036BFBC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB7B570B-C0AC-493E-9E48-34647FAACE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB7B570B-C0AC-493E-9E48-34647FAACE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB7B570B-C0AC-493E-9E48-34647FAACE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB7B570B-C0AC-493E-9E48-34647FAACE41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E15C2268-AEF1-4F8F-813B-1F53EF76FEA8}
 	EndGlobalSection
 EndGlobal

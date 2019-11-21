@@ -9,7 +9,7 @@ namespace Episode_Names.Helper
 {
     class MessageHandler
     {
-        internal static DialogResult? MessagesYesNo(MessageBoxIcon messageBoxIcon, string text)
+        internal static DialogResult MessagesYesNo(MessageBoxIcon messageBoxIcon, string text)
         {
             string warnung = (messageBoxIcon == MessageBoxIcon.Exclamation) ? "Achtung!" : ((messageBoxIcon == MessageBoxIcon.Error)) ? "Warnung!" : "Frage";
             return MessageBox.Show(text,
