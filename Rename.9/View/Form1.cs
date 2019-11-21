@@ -1,7 +1,6 @@
 ﻿using Episode_Names.Anisearch;
 using Episode_Names.Exceptions;
 using Episode_Names.Helper;
-using Episode_Names.View;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -849,10 +848,5 @@ namespace Episode_Names
             pgBar.Style = ProgressBarStyle.Continuous;
         }
         #endregion
-
-        private void collapseGroupBox1_CollapseChanged_1(object sender, bool isCollapsed)
-        {
-
-        }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Episode_Names.View.CustomControls
+namespace CustomControls
 {
     partial class CustomGroupBox
     {

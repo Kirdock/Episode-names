@@ -50,6 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollapsePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CollapsePanel.Designer.cs">
+      <DependentUpon>CollapsePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Designers\CollapsePanelDesigner.cs" />
+    <Compile Include="NotFocusButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NotFocusButton.Designer.cs">
+      <DependentUpon>NotFocusButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CollapseGroupBox.cs">
       <SubType>UserControl</SubType>
@@ -65,14 +78,18 @@
     </Compile>
     <Compile Include="Designers\CollapseGroupBoxDesigner.cs" />
     <Compile Include="Designers\CustomGroupBoxDesigner.cs" />
+    <EmbeddedResource Include="CollapsePanel.resx">
+      <DependentUpon>CollapsePanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="CollapseGroupBox.resx">
       <DependentUpon>CollapseGroupBox.cs</DependentUpon>
@@ -86,6 +103,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\minusIcon1.png" />
+    <Content Include="Resources\plusIcon_151.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

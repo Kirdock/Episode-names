@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CustomControls.Designers;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Episode_Names.View.CustomControls
+namespace CustomControls
 {
     [Designer(typeof(CustomGroupBoxDesigner))]
     public partial class CustomGroupBox : GroupBox

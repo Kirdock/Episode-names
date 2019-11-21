@@ -1,4 +1,4 @@
-﻿namespace Episode_Names.View
+﻿namespace CustomControls
 {
     partial class CollapseGroupBox
     {
@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CollapseGroupBox));
             this.BtnCollapse = new System.Windows.Forms.Button();
-            this.groupBox1 = new Episode_Names.View.CustomControls.CustomGroupBox();
+            this.groupBox1 = new CustomControls.CustomGroupBox();
             this.BtnEllapse = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 

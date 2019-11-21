@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Episode_Names.View.CustomControls;
+using CustomControls.Designers;
 
-namespace Episode_Names.View
+namespace CustomControls
 {
     [Designer(typeof(CollapseGroupBoxDesigner))]
     public partial class CollapseGroupBox : UserControl
     {
-        public event EventHandler<bool> CollapseChanged;
         private readonly int MinHeight = 20;
         private int BoxHeight;
         public string BoxText
@@ -43,8 +42,6 @@ namespace Episode_Names.View
         public CollapseGroupBox()
         {
             InitializeComponent();
-            BtnCollapse.Click += (sender, e) => CollapseChanged?.Invoke(sender, true);
-            BtnEllapse.Click += (sender, e) => CollapseChanged?.Invoke(sender, false);
         }
 
         private void BtnCollapse_Click(object sender, EventArgs e)

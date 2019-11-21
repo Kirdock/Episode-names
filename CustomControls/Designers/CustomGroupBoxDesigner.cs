@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Design;
 
-namespace Episode_Names.View.CustomControls
+namespace CustomControls.Designers
 {
     public class CustomGroupBoxDesigner : ScrollableControlDesigner
     {
