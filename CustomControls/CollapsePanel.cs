@@ -56,15 +56,15 @@ namespace CustomControls
         {
             if (Expanded)
             {
-                BtnExpand.Image = Properties.Resources.ExpandIcon;
-                HeightBefore = panel1.Height;
+                BtnExpand.Image = Properties.Resources.Expand;
+                HeightBefore = panel1.Height-2;
                 Parent.Height -= HeightBefore;
                 Height -= HeightBefore;
                 panel1.Visible = false;
             }
             else
             {
-                BtnExpand.Image = Properties.Resources.CollapseIcon;
+                BtnExpand.Image = Properties.Resources.Collapse;
                 Parent.Height += HeightBefore;
                 Height += HeightBefore;
                 panel1.Visible = true;

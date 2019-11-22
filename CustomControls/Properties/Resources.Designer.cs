@@ -63,9 +63,9 @@ namespace CustomControls.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap CollapseIcon {
+        public static System.Drawing.Bitmap Collapse {
             get {
-                object obj = ResourceManager.GetObject("CollapseIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Collapse", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace CustomControls.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ExpandIcon {
+        public static System.Drawing.Bitmap Expand {
             get {
-                object obj = ResourceManager.GetObject("ExpandIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Expand", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

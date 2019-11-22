@@ -43,8 +43,10 @@
             // 
             // BtnExpand
             // 
+            this.BtnExpand.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.BtnExpand.Dock = System.Windows.Forms.DockStyle.Top;
-            this.BtnExpand.Image = global::CustomControls.Properties.Resources.CollapseIcon;
+            this.BtnExpand.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnExpand.Image = global::CustomControls.Properties.Resources.Collapse;
             this.BtnExpand.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnExpand.Location = new System.Drawing.Point(0, 0);
             this.BtnExpand.Name = "BtnExpand";
@@ -53,7 +55,7 @@
             this.BtnExpand.Text = "Expand";
             this.BtnExpand.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BtnExpand.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.BtnExpand.UseVisualStyleBackColor = true;
+            this.BtnExpand.UseVisualStyleBackColor = false;
             this.BtnExpand.Click += new System.EventHandler(this.BtnExpand_Click);
             // 
             // CollapsePanel
