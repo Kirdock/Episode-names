@@ -61,7 +61,7 @@
             this.LblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.HistoryWorker = new System.ComponentModel.BackgroundWorker();
             this.button1 = new System.Windows.Forms.Button();
-            this.collapsePanel1 = new CustomControls.CollapsePanel();
+            this.CPFormat = new CustomControls.CollapsePanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -78,8 +78,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nbPosition)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.collapsePanel1.WorkingArea.SuspendLayout();
-            this.collapsePanel1.SuspendLayout();
+            this.CPFormat.WorkingArea.SuspendLayout();
+            this.CPFormat.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbNumber)).BeginInit();
             this.SuspendLayout();
@@ -122,7 +122,7 @@
             // btnRename
             // 
             this.btnRename.AccessibleDescription = "";
-            this.btnRename.Location = new System.Drawing.Point(137, 80);
+            this.btnRename.Location = new System.Drawing.Point(124, 80);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(92, 23);
             this.btnRename.TabIndex = 20;
@@ -367,28 +367,28 @@
             this.button1.Text = "Vorschau";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // collapsePanel1
+            // CPFormat
             // 
-            this.collapsePanel1.Location = new System.Drawing.Point(0, 121);
-            this.collapsePanel1.Name = "collapsePanel1";
-            this.collapsePanel1.Size = new System.Drawing.Size(722, 163);
-            this.collapsePanel1.TabIndex = 37;
-            this.collapsePanel1.Text = "Formatierung";
+            this.CPFormat.Location = new System.Drawing.Point(0, 121);
+            this.CPFormat.Name = "CPFormat";
+            this.CPFormat.Size = new System.Drawing.Size(722, 163);
+            this.CPFormat.TabIndex = 37;
+            this.CPFormat.Text = "Formatierung";
             // 
-            // collapsePanel1.WorkingArea
+            // CPFormat.WorkingArea
             // 
-            this.collapsePanel1.WorkingArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.CPFormat.WorkingArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.collapsePanel1.WorkingArea.Controls.Add(this.groupBox1);
-            this.collapsePanel1.WorkingArea.Controls.Add(this.label9);
-            this.collapsePanel1.WorkingArea.Controls.Add(this.txtFormat);
-            this.collapsePanel1.WorkingArea.Controls.Add(this.label2);
-            this.collapsePanel1.WorkingArea.Controls.Add(this.nbNumber);
-            this.collapsePanel1.WorkingArea.Location = new System.Drawing.Point(0, 22);
-            this.collapsePanel1.WorkingArea.Name = "WorkingArea";
-            this.collapsePanel1.WorkingArea.Size = new System.Drawing.Size(722, 141);
-            this.collapsePanel1.WorkingArea.TabIndex = 3;
+            this.CPFormat.WorkingArea.Controls.Add(this.groupBox1);
+            this.CPFormat.WorkingArea.Controls.Add(this.label9);
+            this.CPFormat.WorkingArea.Controls.Add(this.txtFormat);
+            this.CPFormat.WorkingArea.Controls.Add(this.label2);
+            this.CPFormat.WorkingArea.Controls.Add(this.nbNumber);
+            this.CPFormat.WorkingArea.Location = new System.Drawing.Point(0, 22);
+            this.CPFormat.WorkingArea.Name = "WorkingArea";
+            this.CPFormat.WorkingArea.Size = new System.Drawing.Size(722, 141);
+            this.CPFormat.WorkingArea.TabIndex = 3;
             // 
             // groupBox1
             // 
@@ -531,7 +531,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(722, 333);
-            this.Controls.Add(this.collapsePanel1);
+            this.Controls.Add(this.CPFormat);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lblReplace);
@@ -562,9 +562,9 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.collapsePanel1.WorkingArea.ResumeLayout(false);
-            this.collapsePanel1.WorkingArea.PerformLayout();
-            this.collapsePanel1.ResumeLayout(false);
+            this.CPFormat.WorkingArea.ResumeLayout(false);
+            this.CPFormat.WorkingArea.PerformLayout();
+            this.CPFormat.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbNumber)).EndInit();
@@ -605,7 +605,7 @@
         private System.ComponentModel.BackgroundWorker HistoryWorker;
         private System.Windows.Forms.ToolStripMenuItem einstellungenToolStripMenuItem;
         private System.Windows.Forms.Button button1;
-        private CustomControls.CollapsePanel collapsePanel1;
+        private CustomControls.CollapsePanel CPFormat;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label12;

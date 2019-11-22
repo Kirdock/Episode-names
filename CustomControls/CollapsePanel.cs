@@ -14,7 +14,19 @@ namespace CustomControls
     [Designer(typeof(CollapsePanelDesigner))]
     public partial class CollapsePanel : UserControl
     {
-        private bool Expanded;
+        private bool expanded = true;
+        public bool Expanded
+        {
+            get
+            {
+                return expanded;
+            }
+            set
+            {
+                expanded = value;
+                AdjustControls();
+            }
+        }
         private int HeightBefore;
 
         [   EditorBrowsable(EditorBrowsableState.Always),
@@ -49,27 +61,30 @@ namespace CustomControls
         public CollapsePanel()
         {
             InitializeComponent();
-            Expanded = true;
         }
 
         private void BtnExpand_Click(object sender, EventArgs e)
         {
+            Expanded = !Expanded;
+        }
+
+        private void AdjustControls()
+        {
             if (Expanded)
-            {
-                BtnExpand.Image = Properties.Resources.Expand;
-                HeightBefore = panel1.Height-2;
-                Parent.Height -= HeightBefore;
-                Height -= HeightBefore;
-                panel1.Visible = false;
-            }
-            else
             {
                 BtnExpand.Image = Properties.Resources.Collapse;
                 Parent.Height += HeightBefore;
                 Height += HeightBefore;
                 panel1.Visible = true;
             }
-            Expanded = !Expanded;
+            else
+            {
+                BtnExpand.Image = Properties.Resources.Expand;
+                HeightBefore = panel1.Height - 2;
+                Parent.Height -= HeightBefore;
+                Height -= HeightBefore;
+                panel1.Visible = false;
+            }
         }
     }
 }

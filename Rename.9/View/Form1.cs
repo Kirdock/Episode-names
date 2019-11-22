@@ -31,6 +31,7 @@ namespace Episode_Names
             txtSplit.Text = Properties.Settings.Default.splitString;
             TopMost = Properties.Settings.Default.Foreground;
             txtSearch.Text = Properties.Settings.Default.SR_Search;
+            CPFormat.Expanded = Properties.Settings.Default.FormatExpanded;
             pgBar.Value = cmbOption.SelectedIndex = 0;
             LblMessage.Text = string.Empty;
             abort = false;
@@ -371,6 +372,7 @@ namespace Episode_Names
             Properties.Settings.Default.position = nbPosition.Value;
             Properties.Settings.Default.BrowseLocation = txtPath.Text;
             Properties.Settings.Default.SR_Search = txtSearch.Text;
+            Properties.Settings.Default.FormatExpanded = CPFormat.Expanded;
             if (!cmbOption.Visible)
             {
                 Properties.Settings.Default.SR_Replace = txtSplit.Text;

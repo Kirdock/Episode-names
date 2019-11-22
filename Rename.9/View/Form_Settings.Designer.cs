@@ -293,10 +293,10 @@
             this.GitHubLink.AutoSize = true;
             this.GitHubLink.Location = new System.Drawing.Point(6, 5);
             this.GitHubLink.Name = "GitHubLink";
-            this.GitHubLink.Size = new System.Drawing.Size(63, 13);
+            this.GitHubLink.Size = new System.Drawing.Size(40, 13);
             this.GitHubLink.TabIndex = 0;
             this.GitHubLink.TabStop = true;
-            this.GitHubLink.Text = "GitHub Link";
+            this.GitHubLink.Text = "GitHub";
             this.GitHubLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GitHubLink_LinkClicked);
             // 
             // Form_Settings

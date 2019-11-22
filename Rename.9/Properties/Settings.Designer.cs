@@ -190,5 +190,17 @@ namespace Episode_Names.Properties {
                 this["UpdateDialogShowed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FormatExpanded {
+            get {
+                return ((bool)(this["FormatExpanded"]));
+            }
+            set {
+                this["FormatExpanded"] = value;
+            }
+        }
     }
 }
