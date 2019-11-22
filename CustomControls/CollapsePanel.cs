@@ -46,17 +46,10 @@ namespace CustomControls
             }
         }
 
-        [
-        Category("Appearance"),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
+        [   Category("Appearance"),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
-        public Panel WorkingArea
-        {
-            get
-            {
-                return panel1;
-            }
-        }
+        public Panel WorkingArea => panel1;
 
         public CollapsePanel()
         {
@@ -70,20 +63,23 @@ namespace CustomControls
 
         private void AdjustControls()
         {
-            if (Expanded)
+            if (Parent != null)
             {
-                BtnExpand.Image = Properties.Resources.Collapse;
-                Parent.Height += HeightBefore;
-                Height += HeightBefore;
-                panel1.Visible = true;
-            }
-            else
-            {
-                BtnExpand.Image = Properties.Resources.Expand;
-                HeightBefore = panel1.Height - 2;
-                Parent.Height -= HeightBefore;
-                Height -= HeightBefore;
-                panel1.Visible = false;
+                if (Expanded)
+                {
+                    BtnExpand.Image = Properties.Resources.Collapse;
+                    Parent.Height += HeightBefore;
+                    Height += HeightBefore;
+                    panel1.Visible = true;
+                }
+                else
+                {
+                    BtnExpand.Image = Properties.Resources.Expand;
+                    HeightBefore = panel1.Height - 2;
+                    Parent.Height -= HeightBefore;
+                    Height -= HeightBefore;
+                    panel1.Visible = false;
+                }
             }
         }
     }

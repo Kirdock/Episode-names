@@ -62,6 +62,11 @@
             this.HistoryWorker = new System.ComponentModel.BackgroundWorker();
             this.button1 = new System.Windows.Forms.Button();
             this.CPFormat = new CustomControls.CollapsePanel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.CmBPreset = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.TxtFormat = new CustomControls.FormatTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -71,10 +76,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtFormat = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.nbNumber = new System.Windows.Forms.NumericUpDown();
+            this.TxtPresetName = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.nbPosition)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -272,7 +279,7 @@
             this.pgBar.AccessibleName = "";
             this.pgBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgBar.Location = new System.Drawing.Point(0, 290);
+            this.pgBar.Location = new System.Drawing.Point(0, 336);
             this.pgBar.Name = "pgBar";
             this.pgBar.Size = new System.Drawing.Size(722, 20);
             this.pgBar.TabIndex = 21;
@@ -340,7 +347,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LblMessage});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 311);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 359);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(722, 22);
             this.statusStrip1.SizingGrip = false;
@@ -369,9 +376,10 @@
             // 
             // CPFormat
             // 
+            this.CPFormat.Expanded = true;
             this.CPFormat.Location = new System.Drawing.Point(0, 121);
             this.CPFormat.Name = "CPFormat";
-            this.CPFormat.Size = new System.Drawing.Size(722, 163);
+            this.CPFormat.Size = new System.Drawing.Size(722, 209);
             this.CPFormat.TabIndex = 37;
             this.CPFormat.Text = "Formatierung";
             // 
@@ -380,15 +388,68 @@
             this.CPFormat.WorkingArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.CPFormat.WorkingArea.Controls.Add(this.groupBox1);
+            this.CPFormat.WorkingArea.Controls.Add(this.button4);
+            this.CPFormat.WorkingArea.Controls.Add(this.button3);
+            this.CPFormat.WorkingArea.Controls.Add(this.label13);
+            this.CPFormat.WorkingArea.Controls.Add(this.TxtPresetName);
+            this.CPFormat.WorkingArea.Controls.Add(this.button2);
             this.CPFormat.WorkingArea.Controls.Add(this.label9);
-            this.CPFormat.WorkingArea.Controls.Add(this.txtFormat);
+            this.CPFormat.WorkingArea.Controls.Add(this.CmBPreset);
+            this.CPFormat.WorkingArea.Controls.Add(this.label10);
+            this.CPFormat.WorkingArea.Controls.Add(this.TxtFormat);
+            this.CPFormat.WorkingArea.Controls.Add(this.groupBox1);
             this.CPFormat.WorkingArea.Controls.Add(this.label2);
             this.CPFormat.WorkingArea.Controls.Add(this.nbNumber);
             this.CPFormat.WorkingArea.Location = new System.Drawing.Point(0, 22);
             this.CPFormat.WorkingArea.Name = "WorkingArea";
-            this.CPFormat.WorkingArea.Size = new System.Drawing.Size(722, 141);
+            this.CPFormat.WorkingArea.Size = new System.Drawing.Size(722, 187);
             this.CPFormat.WorkingArea.TabIndex = 3;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(153, 68);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 73;
+            this.button2.Text = "Speichern";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(9, 137);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 72;
+            this.label9.Text = "Formatierung:";
+            // 
+            // CmBPreset
+            // 
+            this.CmBPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CmBPreset.FormattingEnabled = true;
+            this.CmBPreset.Items.AddRange(new object[] {
+            "Vorlage1"});
+            this.CmBPreset.Location = new System.Drawing.Point(12, 26);
+            this.CmBPreset.Name = "CmBPreset";
+            this.CmBPreset.Size = new System.Drawing.Size(121, 21);
+            this.CmBPreset.TabIndex = 71;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(9, 10);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(52, 13);
+            this.label10.TabIndex = 70;
+            this.label10.Text = "Vorlagen:";
+            // 
+            // TxtFormat
+            // 
+            this.TxtFormat.Location = new System.Drawing.Point(12, 153);
+            this.TxtFormat.Name = "TxtFormat";
+            this.TxtFormat.Size = new System.Drawing.Size(430, 20);
+            this.TxtFormat.TabIndex = 69;
+            this.TxtFormat.Valid = false;
             // 
             // groupBox1
             // 
@@ -402,7 +463,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Location = new System.Drawing.Point(465, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(249, 120);
+            this.groupBox1.Size = new System.Drawing.Size(249, 174);
             this.groupBox1.TabIndex = 67;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Legende";
@@ -479,29 +540,10 @@
             this.label5.TabIndex = 25;
             this.label5.Text = "Position:";
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
-            this.label9.Location = new System.Drawing.Point(9, 41);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(97, 17);
-            this.label9.TabIndex = 66;
-            this.label9.Text = "Format String:";
-            // 
-            // txtFormat
-            // 
-            this.txtFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFormat.Location = new System.Drawing.Point(12, 61);
-            this.txtFormat.Name = "txtFormat";
-            this.txtFormat.Size = new System.Drawing.Size(446, 20);
-            this.txtFormat.TabIndex = 65;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 14);
+            this.label2.Location = new System.Drawing.Point(9, 115);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 64;
@@ -510,7 +552,7 @@
             // nbNumber
             // 
             this.nbNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.nbNumber.Location = new System.Drawing.Point(124, 12);
+            this.nbNumber.Location = new System.Drawing.Point(153, 113);
             this.nbNumber.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -525,12 +567,46 @@
             0,
             0});
             // 
+            // TxtPresetName
+            // 
+            this.TxtPresetName.Location = new System.Drawing.Point(12, 70);
+            this.TxtPresetName.Name = "TxtPresetName";
+            this.TxtPresetName.Size = new System.Drawing.Size(121, 20);
+            this.TxtPresetName.TabIndex = 74;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(12, 54);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 13);
+            this.label13.TabIndex = 75;
+            this.label13.Text = "Name:";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(153, 23);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 76;
+            this.button3.Text = "Laden";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(249, 23);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 77;
+            this.button4.Text = "Löschen";
+            this.button4.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(722, 333);
+            this.ClientSize = new System.Drawing.Size(722, 381);
             this.Controls.Add(this.CPFormat);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.statusStrip1);
@@ -615,10 +691,17 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox txtFormat;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown nbNumber;
+        private CustomControls.FormatTextBox TxtFormat;
+        private System.Windows.Forms.ComboBox CmBPreset;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox TxtPresetName;
     }
 }
 

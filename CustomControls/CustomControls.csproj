@@ -57,6 +57,12 @@
       <DependentUpon>CollapsePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Designers\CollapsePanelDesigner.cs" />
+    <Compile Include="FormatTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormatTextBox.Designer.cs">
+      <DependentUpon>FormatTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="NotFocusButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -67,8 +73,11 @@
     <EmbeddedResource Include="CollapsePanel.resx">
       <DependentUpon>CollapsePanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormatTextBox.resx">
+      <DependentUpon>FormatTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -87,7 +96,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\GlobalSettings\GlobalSettings.csproj">
+      <Project>{bcbd5963-6103-4365-9424-f0afacfde9b1}</Project>
+      <Name>GlobalSettings</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Expand.png" />
     <None Include="Resources\Collapse.png" />

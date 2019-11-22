@@ -1,6 +1,7 @@
 ﻿using Episode_Names.Anisearch;
 using Episode_Names.Exceptions;
 using Episode_Names.Helper;
+using GlobalSettings;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,9 @@ namespace Episode_Names
             TopMost = Properties.Settings.Default.Foreground;
             txtSearch.Text = Properties.Settings.Default.SR_Search;
             CPFormat.Expanded = Properties.Settings.Default.FormatExpanded;
+            nbNumber.Value = Properties.Settings.Default.startNumber;
+            TxtFormat.Text = Properties.Settings.Default.formatString;
+
             pgBar.Value = cmbOption.SelectedIndex = 0;
             LblMessage.Text = string.Empty;
             abort = false;
@@ -58,12 +62,12 @@ namespace Episode_Names
         #region Button "Rename"-Klick. Überprüfen welche Kategorie (OnlyNumber, Anzahl der Datensätze stimmen mit Dateien im Ordner überein)
         private void btnRename_Click()
         {
-            if (Data != null || Properties.Settings.Default.OnlyNumber)
+            if (Data != null || TxtFormat.OnlyNumber)
             {
                 try
                 {
                     #region Falls nur %n im Format String ist, wird alles nach diesem Schema umbenannt
-                    if (Properties.Settings.Default.OnlyNumber)
+                    if (TxtFormat.OnlyNumber)
                     {
                         renameWithoutData_Click(true);
                         SetStatusMessage("Abgeschlossen!!");
@@ -143,13 +147,13 @@ namespace Episode_Names
         #region Format-String wird angepasst
         private string FormatString(string row, string dirName)
         {
-            IEnumerable<string> text = Properties.Settings.Default.formatString.Split(new string[] { SettingHelper.Separator.ToString() }, StringSplitOptions.RemoveEmptyEntries);
+            IEnumerable<string> text = TxtFormat.Text.Split(new string[] { FormatSettings.Separator.ToString() }, StringSplitOptions.RemoveEmptyEntries);
 
-            List<string> formates = SettingHelper.Formates;
-            List<string> formatesWithoutNumeration = SettingHelper.FormatesWithoutNumeration;
+            List<string> formates = FormatSettings.Formates;
+            List<string> formatesWithoutNumeration = FormatSettings.FormatesWithoutNumeration;
 
             StringBuilder fullname = new StringBuilder();
-            if (!Properties.Settings.Default.formatString.StartsWith(SettingHelper.Separator.ToString()))
+            if (!TxtFormat.Text.StartsWith(FormatSettings.Separator.ToString()))
             {
                 fullname.Append(text.FirstOrDefault() ?? string.Empty);
                 text = text.Skip(1);
@@ -163,9 +167,9 @@ namespace Episode_Names
                                 .LastOrDefault();
                 if(format == null)
                 {
-                    for(int i = 1; i <= SettingHelper.MaxNumber.ToString().Length; i++)
+                    for(int i = 1; i <= FormatSettings.MaxNumber.ToString().Length; i++)
                     {
-                        if(line.Length >= i && int.TryParse(line.Substring(0,i), out int result) && result <= SettingHelper.MaxNumber)
+                        if(line.Length >= i && int.TryParse(line.Substring(0,i), out int result) && result <= FormatSettings.MaxNumber)
                         {
                             format = result.ToString();
                         }
@@ -177,18 +181,18 @@ namespace Episode_Names
                     try
                     {
                         #region Überprüfen um was für einen Format-String Befehl es sich handelt
-                        if (format == SettingHelper.Number)
+                        if (format == FormatSettings.Number)
                         {
                             int temp = pgBar.Value + Properties.Settings.Default.startNumber;
                             string number = NullCharacters(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
                             fullname.Append(number);
                         }
-                        else if (format == SettingHelper.Position)
+                        else if (format == FormatSettings.Position)
                         {
                             char a = txtSplit.Text == "\\t" ? '\t' : '\n';
                             fullname.Append(SplitLine(row, a, (int)nbPosition.Value));
                         }
-                        else if (format == SettingHelper.Directory)
+                        else if (format == FormatSettings.Directory)
                         {
                             fullname.Append(dirName);
                         }
@@ -224,7 +228,7 @@ namespace Episode_Names
                 }
                 else
                 {
-                    fullname.Append(SettingHelper.Separator).Append(line);
+                    fullname.Append(FormatSettings.Separator).Append(line);
                 }  
             }
             return ReplaceSpecialCharacters(fullname.ToString());
@@ -238,7 +242,7 @@ namespace Episode_Names
         {
             int temp = pgBar.Value + Properties.Settings.Default.startNumber;
             string number = NullCharacters(pgBar.Maximum - 1 + Properties.Settings.Default.startNumber, temp) + temp;
-            return Properties.Settings.Default.formatString.Replace(SettingHelper.Separator + SettingHelper.Number, number);
+            return TxtFormat.Text.Replace(FormatSettings.Separator + FormatSettings.Number, number);
         }
         #endregion
 
@@ -373,6 +377,7 @@ namespace Episode_Names
             Properties.Settings.Default.BrowseLocation = txtPath.Text;
             Properties.Settings.Default.SR_Search = txtSearch.Text;
             Properties.Settings.Default.FormatExpanded = CPFormat.Expanded;
+            Properties.Settings.Default.formatString = TxtFormat.Text;
             if (!cmbOption.Visible)
             {
                 Properties.Settings.Default.SR_Replace = txtSplit.Text;
@@ -847,5 +852,9 @@ namespace Episode_Names
             pgBar.Style = ProgressBarStyle.Continuous;
         }
         #endregion
+
+        private void BtnResetFormat_Click(object sender, EventArgs e)
+        {
+        }
     }
 }
