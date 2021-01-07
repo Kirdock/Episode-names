@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace Episode_Names.Anisearch
         private List<string> episodeList;
         private readonly string tvdbDomain = "https://www.thetvdb.com";
         private readonly string aniDBDomain = "https://anidb.net/perl-bin/";
-        private readonly string fernsehserienDommain = "https://www.fernsehserien.de";
+        private readonly string fernsehserienDomain = "https://www.fernsehserien.de";
 
         public Anisearch_Table()
         {
@@ -184,7 +185,7 @@ namespace Episode_Names.Anisearch
                 HtmlWeb htmlWeb = new HtmlWeb();
                 HtmlAgilityPack.HtmlDocument doc = htmlWeb.Load(changedUrl);
 
-                if (valid = doc.DocumentNode.SelectSingleNode("//nav[@id='serienmenu']") != null)
+                if (valid = doc.DocumentNode.SelectSingleNode("//nav[@class='series-menu']") != null)
                 {
                     url = changedUrl;
                 }
@@ -206,7 +207,6 @@ namespace Episode_Names.Anisearch
             {
                 foreach (HtmlNode row in tables[i].SelectNodes("tr[@itemprop='episode']"))
                 {
-                    string line = null;
                     StringBuilder builder = new StringBuilder();
 
                     builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[1]?.InnerText ?? string.Empty).Trim()).Append("\t");
@@ -214,8 +214,7 @@ namespace Episode_Names.Anisearch
                     var episodeTitle = row.SelectSingleNode("td//span[@itemprop='name']")?.InnerText ?? row.SelectSingleNode("td [@lang='ja']//span[@itemprop='name']")?.InnerText ?? string.Empty;
                     builder.Append(WebUtility.HtmlDecode(episodeTitle).Trim());
 
-                    line = builder.ToString();
-                    episodeList.Add(line.Trim());
+                    episodeList.Add(builder.ToString().Trim());
                 }
             }
             return episodeList;
@@ -496,13 +495,13 @@ namespace Episode_Names.Anisearch
 
         private void searchTextFernsehserien(string searchText)
         {
-            Uri ur = new Uri($"{fernsehserienDommain}/suche/{adjustSearchTextTVDB(searchText).Replace("%2F"," ")}");
+            Uri ur = new Uri($"{fernsehserienDomain}/suche/{adjustSearchTextTVDB(searchText).Replace("%2F"," ")}");
             List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
 
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(ur.AbsoluteUri);
             string url = web.ResponseUri.ToString();
-            if (!url.StartsWith(fernsehserienDommain + "/suche/"))
+            if (!url.StartsWith(fernsehserienDomain + "/suche/"))
             {
                 setUrl(url);
                 getSeasonsFernsehserien(url);
@@ -513,7 +512,7 @@ namespace Episode_Names.Anisearch
                 {
                     string text = WebUtility.HtmlDecode(entry.SelectSingleNode("a/span[@class='suchergebnis-titel']").InnerText);
                     string nurl = WebUtility.HtmlDecode(entry.SelectSingleNode("a[@href]").Attributes["href"].Value);
-                    resultUrl.Add(new KeyValuePair<string, string>(fernsehserienDommain + nurl + "/episodenguide", text));
+                    resultUrl.Add(new KeyValuePair<string, string>(fernsehserienDomain + nurl + "/episodenguide", text));
                 }
                 setReceivedUrls(resultUrl);
             }
@@ -653,19 +652,31 @@ namespace Episode_Names.Anisearch
                 int selectedIndex = cmbWebsite.SelectedIndex;
                 new Thread(() =>
                 {
-                    if (selectedIndex == 3) //TVDB
+                    try
                     {
-                        getSeasons(url);
-                    }
-                    else if (selectedIndex == 2) //Fernsehserien
-                    {
-                        getSeasonsFernsehserien(url);
-                    }
-                    StopProgressBar();
+                        if (selectedIndex == 3) //TVDB
+                        {
+                            getSeasons(url);
+                        }
+                        else if (selectedIndex == 2) //Fernsehserien
+                        {
+                            getSeasonsFernsehserien(url);
+                        }
+                        StopProgressBar();
 
-                    txtUrl.BeginInvoke(new MethodInvoker(()=>{
-                        txtUrl.Text = url;
-                    }));
+                        txtUrl.BeginInvoke(new MethodInvoker(() =>
+                        {
+                            txtUrl.Text = url;
+                        }));
+                    }
+                    catch(Exception ex)
+                    {
+                        ErrorMessage(ex);
+                    }
+                    finally
+                    {
+                        StopProgressBar();
+                    }
                 }).Start();
             }
         }
@@ -674,30 +685,8 @@ namespace Episode_Names.Anisearch
         {
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
-
-            List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
-            var menuList = doc.DocumentNode.SelectNodes("//nav[@id= 'serienmenu']/ul/li");
-            var seasons = menuList[1].SelectNodes("ul/li");
-            foreach(HtmlNode node in menuList)
-            {
-                if(node.SelectSingleNode("a").InnerText == "Episodenguide")
-                {
-                    seasons = node.SelectNodes("ul/li");
-                }
-            }
-            if (seasons != null)
-            {
-                foreach (HtmlNode row in seasons)
-                {
-                    string text = WebUtility.HtmlDecode(row.InnerText).Trim();
-                    string nurl = WebUtility.HtmlDecode(row.SelectSingleNode("a[@href]").Attributes["href"].Value);
-                    resultUrl.Add(new KeyValuePair<string, string>(tvdbDomain + nurl, text));
-                }
-            }
-            else
-            {
-                resultUrl.Add(new KeyValuePair<string, string>(url, "Übersicht"));
-            }
+            IEnumerable<KeyValuePair<string, string>> seasons = doc.DocumentNode.SelectNodes("//nav[@class='series-menu']/ul/li[a[contains(text(), 'Episoden')]]/ul/li/a[1]").Select(node => new KeyValuePair<string, string>(fernsehserienDomain + node.Attributes["href"].Value, node.InnerText));
+            List<KeyValuePair<string, string>> resultUrl = seasons?.ToList() ?? new List<KeyValuePair<string, string>>(){new KeyValuePair<string, string>(url, "Übersicht")};
             setSeasons(resultUrl);
         }
 
