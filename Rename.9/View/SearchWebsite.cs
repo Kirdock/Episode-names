@@ -199,25 +199,49 @@ namespace Episode_Names.Anisearch
             List<string>  episodeList = new List<string>();
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
-            
-            var tables = doc.DocumentNode.SelectNodes("//table[contains(@class,'episodenliste')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
+
+            HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//table[contains(@class,'episodenliste')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
+            HtmlNodeCollection newTables = doc.DocumentNode.SelectNodes("//div[@class='episodenliste-2019']");
             int beginCounter = season == 0 ? 0 : season-1;
-            int endCounter = season == 0 ? tables.Count - 1 : season-1;
-            for (int i = beginCounter; i <= endCounter; i++)
+            if (newTables == null)
             {
-                foreach (HtmlNode row in tables[i].SelectNodes("tr[@itemprop='episode']"))
+                int endCounter = season == 0 ? tables.Count - 1 : season - 1;
+                for (int i = beginCounter; i <= endCounter; i++)
                 {
-                    StringBuilder builder = new StringBuilder();
+                    foreach (HtmlNode row in tables[i].SelectNodes("tr[@itemprop='episode']"))
+                    {
+                        StringBuilder builder = new StringBuilder();
 
-                    builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[1]?.InnerText ?? string.Empty).Trim()).Append("\t");
-                    builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[4]?.InnerText ?? string.Empty).Trim()).Append("\t");
-                    var episodeTitle = row.SelectSingleNode("td//span[@itemprop='name']")?.InnerText ?? row.SelectSingleNode("td [@lang='ja']//span[@itemprop='name']")?.InnerText ?? string.Empty;
-                    builder.Append(WebUtility.HtmlDecode(episodeTitle).Trim());
+                        builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[1]?.InnerText ?? string.Empty).Trim()).Append("\t");
+                        builder.Append(WebUtility.HtmlDecode(row.SelectNodes("td")[4]?.InnerText ?? string.Empty).Trim()).Append("\t");
+                        var episodeTitle = row.SelectSingleNode("td//span[@itemprop='name']")?.InnerText ?? row.SelectSingleNode("td [@lang='ja']//span[@itemprop='name']")?.InnerText ?? string.Empty;
+                        builder.Append(WebUtility.HtmlDecode(episodeTitle).Trim());
 
-                    episodeList.Add(builder.ToString().Trim());
+                        episodeList.Add(builder.ToString().Trim());
+                    }
+                }
+            }
+            else
+            {
+                int endCounter = season == 0 ? newTables.Count - 1 : season - 1;
+                for (int i = beginCounter; i <= endCounter; i++)
+                {
+                    foreach (HtmlNode row in newTables[i].SelectNodes("a"))
+                    {
+                        string episodeNumber = row.SelectSingleNode("div[@role='cell' and @itemprop='episodeNumber']")?.Attributes["content"]?.Value;
+                        string titleGerman = row.SelectSingleNode("div[@role='cell']/span[@itemprop='name']")?.InnerText;
+                        string titleFallback = titleGerman ?? row.SelectSingleNode("div[@role='cell' and @lang='ja']")?.InnerText;
+
+                        episodeList.Add($"{FormatWebString(episodeNumber)}\t{FormatWebString(titleFallback)}");
+                    }
                 }
             }
             return episodeList;
+        }
+
+        private string FormatWebString(string text)
+        {
+            return WebUtility.HtmlDecode(text ?? string.Empty).Trim();
         }
 
         private List<string> GetEpisodeListTVDB(string url, string language)
@@ -461,6 +485,7 @@ namespace Episode_Names.Anisearch
                                 searchTextAniDB(searchText);
                                 break;
 
+
                             case 1: //Anisearch
                                 searchTextAnisearch(getSearchUrlAnisearch(searchText, domain), domain);
                                 break;
@@ -508,9 +533,9 @@ namespace Episode_Names.Anisearch
             }
             else
             {
-                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//li[contains(@class,'suchergebnis')]"))
+                foreach (HtmlNode entry in doc.DocumentNode.SelectNodes("//li[contains(@class,'suchergebnisse-sendung')]"))
                 {
-                    string text = WebUtility.HtmlDecode(entry.SelectSingleNode("a/span[@class='suchergebnis-titel']").InnerText);
+                    string text = WebUtility.HtmlDecode(entry.SelectSingleNode("a/dl/dt").InnerText);
                     string nurl = WebUtility.HtmlDecode(entry.SelectSingleNode("a[@href]").Attributes["href"].Value);
                     resultUrl.Add(new KeyValuePair<string, string>(fernsehserienDomain + nurl + "/episodenguide", text));
                 }
@@ -685,8 +710,8 @@ namespace Episode_Names.Anisearch
         {
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
-            IEnumerable<KeyValuePair<string, string>> seasons = doc.DocumentNode.SelectNodes("//nav[@class='series-menu']/ul/li[a[contains(text(), 'Episoden')]]/ul/li/a[1]").Select(node => new KeyValuePair<string, string>(fernsehserienDomain + node.Attributes["href"].Value, node.InnerText));
-            List<KeyValuePair<string, string>> resultUrl = seasons?.ToList() ?? new List<KeyValuePair<string, string>>(){new KeyValuePair<string, string>(url, "Übersicht")};
+            IEnumerable<KeyValuePair<string, string>> seasons = doc.DocumentNode.SelectNodes("//nav[@class='series-menu']/ul/li[a[contains(text(), 'Episoden')]]/ul/li/a[1]")?.Select(node => new KeyValuePair<string, string>(fernsehserienDomain + node.Attributes["href"].Value, node.InnerText));
+            List<KeyValuePair<string, string>> resultUrl = seasons?.ToList() ?? new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(url, "Übersicht") };
             setSeasons(resultUrl);
         }
 
