@@ -661,13 +661,7 @@ namespace Episode_Names.Anisearch
             objResponse.Close();
         }
 
-        interface IAnisearchSearchKey
-        {
-            string key { get; set; }
-            CookieContainer context { get; set; }
-        }
-
-        private IAnisearchSearchKey GetAnisearchSearchKey(string domain)
+        private dynamic GetAnisearchSearchKey(string domain)
         {
             var objRequest = WebRequest.Create(domain);
             var container = new CookieContainer();
@@ -679,13 +673,10 @@ namespace Episode_Names.Anisearch
             string[] parts = node.Attributes["data-search"].Value.Split(',');
             container.Add(new Cookie(parts[0], parts[1], "/", ".anisearch.com"));
 
-            dynamic myObj = new
-            {
+            return new {
                 key = $"{parts[0]}={parts[1]}",
                 context = container,
             };
-            // interface without class, yay
-            return myObj.ActLike<IAnisearchSearchKey>();
         }
 
         private string getSearchUrlAnisearch(string searchText,string domain)
