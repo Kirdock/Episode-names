@@ -7,8 +7,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
+using System.Web;
 using System.Windows.Forms;
 
 namespace Episode_Names.Anisearch
@@ -36,7 +38,7 @@ namespace Episode_Names.Anisearch
         }
         #endregion
 
-        
+
         private void setCmbLanguages()
         {
             cmbLanguageEpisodes.DataSource = cmbWebsite.SelectedIndex == 0 ? getEnglish() : cmbWebsite.SelectedIndex == 2 ? getGerman() : getLanguagesWithJapanese();
@@ -54,11 +56,11 @@ namespace Episode_Names.Anisearch
             {
                 languages.Add(new KeyValuePair<string, string>("com", "None"));
             }
-            else if(cmbWebsite.SelectedIndex == 2)
+            else if (cmbWebsite.SelectedIndex == 2)
             {
                 languages = getGerman();
             }
-            
+
             else
             {
                 languages.AddRange(getLanguagesWithJapanese());
@@ -69,7 +71,7 @@ namespace Episode_Names.Anisearch
 
             cmbLanguageSearch.SelectedIndex = Properties.Settings.Default.SecondLanguage;
             cmbLanguageEpisodes.SelectedIndex = Properties.Settings.Default.Language;
-            
+
         }
 
         private void addGerman(List<KeyValuePair<string, string>> languages)
@@ -124,7 +126,7 @@ namespace Episode_Names.Anisearch
             string url = txtUrl.Text;
             string urlTVDB = cmbSeasons.SelectedItem != null ? ((KeyValuePair<string, string>)cmbSeasons.SelectedItem).Key : null;
             int season = cmbSeasons.SelectedIndex;
-            
+
             new Thread(() =>
             {
                 bool valid = false;
@@ -138,7 +140,7 @@ namespace Episode_Names.Anisearch
                     }
                     else if (selectedIndex == 3 && (valid = checkUrlTVDB(url, out url)))
                     {
-                        
+
                         result = GetEpisodeListTVDB(urlTVDB, language);
                     }
                     else if (selectedIndex == 0 && (valid = checkUrlAniDB(url)))
@@ -196,13 +198,13 @@ namespace Episode_Names.Anisearch
         private List<string> getEpisodeListFernsehserien(string url, int season)
         {
 
-            List<string>  episodeList = new List<string>();
+            List<string> episodeList = new List<string>();
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
 
             HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//table[contains(@class,'episodenliste')]//tbody[@itemprop='season' or @itemprop='containsSeason']");
             HtmlNodeCollection newTables = doc.DocumentNode.SelectNodes("//div[@class='episodenliste-2019']");
-            int beginCounter = season == 0 ? 0 : season-1;
+            int beginCounter = season == 0 ? 0 : season - 1;
             if (newTables == null)
             {
                 int endCounter = season == 0 ? tables.Count - 1 : season - 1;
@@ -246,10 +248,10 @@ namespace Episode_Names.Anisearch
 
         private List<string> GetEpisodeListTVDB(string url, string language)
         {
-            
+
             language = language == "com" ? "en" : language;
 
-            List<string>  episodeList = new List<string>();
+            List<string> episodeList = new List<string>();
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(url);
 
@@ -309,7 +311,7 @@ namespace Episode_Names.Anisearch
                     builder.Append(WebUtility.HtmlDecode(list[1].InnerText).Trim());
                     line = builder.ToString();
 
-                    
+
                 }
                 catch (NullReferenceException)
                 {
@@ -324,24 +326,24 @@ namespace Episode_Names.Anisearch
             return episodeList;
         }
 
-        private string getDomain()
+        private string getAnisearchDomain()
         {
-            string language = ((KeyValuePair<string,string>) cmbLanguageSearch.SelectedItem).Key;
-            return "https://anisearch." + (language.Equals("de") ? language : "com");
+            string language = ((KeyValuePair<string, string>)cmbLanguageSearch.SelectedItem).Key;
+            return "https://www.anisearch." + (language.Equals("de") ? language : "com");
         }
 
         private string getDomainEpisodes(string language)
         {
-            return "https://anisearch." + (language.Equals("de") ? language : "com");
+            return "https://www.anisearch." + (language.Equals("de") ? language : "com");
         }
 
 
-        private bool checkUrlAnisearch(string language,string inputUrl, out string url)
+        private bool checkUrlAnisearch(string language, string inputUrl, out string url)
         {
             bool valid;
             url = string.Empty;
             string[] text = inputUrl.Replace("http://", "").Replace("https://", "").Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-            if (valid = (inputUrl.ToUpper().Contains("ANISEARCH.") && text.Length>=3))
+            if (valid = (inputUrl.ToUpper().Contains("ANISEARCH.") && text.Length >= 3))
             {
                 url = getDomainEpisodes(language) + "/" + text[1] + "/" + text[2] + "/episodes";
             }
@@ -383,18 +385,18 @@ namespace Episode_Names.Anisearch
         }
 
 
-        private void StopProgressBar(){
+        private void StopProgressBar() {
             pgLoading.GetCurrentParent().Invoke(new MethodInvoker(() =>
             {
                 pgLoading.Style = ProgressBarStyle.Blocks;
             }));
 
-            
-            BeginInvoke(new MethodInvoker(()=>
+
+            BeginInvoke(new MethodInvoker(() =>
             {
                 setEnabled(true);
             }));
-            
+
         }
 
 
@@ -414,9 +416,9 @@ namespace Episode_Names.Anisearch
                 #region Falls es mehr anderssprachige Einträge gibt
                 try {
                     line = WebUtility.HtmlDecode(row.SelectNodes("th")[0].InnerText) + "\t" +
-                            WebUtility.HtmlDecode(row.SelectNodes($"td[@data-title='{(language.Equals("de") ? "Titel" : "Title") }']")[0].SelectSingleNode($"div[@lang='{language}']").InnerText);
+                            WebUtility.HtmlDecode(row.SelectNodes($"td[@data-title='{(language.Equals("de") ? "Titel" : "Title")}']")[0].SelectSingleNode($"div[@lang='{language}']").InnerText);
                 }
-                catch (NullReferenceException){
+                catch (NullReferenceException) {
                 }
                 #endregion
 
@@ -434,7 +436,7 @@ namespace Episode_Names.Anisearch
         {
             StopProgressBar();
             DialogResult = DialogResult.OK;
-            BeginInvoke(new MethodInvoker(()=> {
+            BeginInvoke(new MethodInvoker(() => {
                 Close();
             }));
         }
@@ -452,7 +454,7 @@ namespace Episode_Names.Anisearch
         {
             pgLoading.GetCurrentParent().BeginInvoke(new MethodInvoker(() => {
                 pgLoading.Style = ProgressBarStyle.Marquee;
-            }));;
+            })); ;
             BeginInvoke(new MethodInvoker(() =>
             {
                 setEnabled(false);
@@ -461,7 +463,7 @@ namespace Episode_Names.Anisearch
 
         private void setEnabled(bool status)
         {
-            ControlBox = btnCheckURL.Enabled =  cmbLanguageSearch.Enabled = cmbLanguageEpisodes.Enabled = cmbWebsite.Enabled = cmbSeasons.Enabled = btnOk.Enabled = listResult.Enabled = txtSearch.Enabled = status;
+            ControlBox = btnCheckURL.Enabled = cmbLanguageSearch.Enabled = cmbLanguageEpisodes.Enabled = cmbWebsite.Enabled = cmbSeasons.Enabled = btnOk.Enabled = listResult.Enabled = txtSearch.Enabled = status;
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -469,9 +471,9 @@ namespace Episode_Names.Anisearch
             if (e.KeyCode == Keys.Enter)
             {
                 StartProgressBar();
-                
+
                 string searchText = txtSearch.Text;
-                string domain = getDomain();
+                string domain = getAnisearchDomain();
                 int index = cmbWebsite.SelectedIndex;
                 int selectedLanguageIndex = cmbLanguageSearch.SelectedIndex;
                 string selectedLanguage = ((KeyValuePair<string, string>)cmbLanguageSearch.SelectedItem).Key;
@@ -509,7 +511,7 @@ namespace Episode_Names.Anisearch
                         StopProgressBar();
                     }
                 }).Start();
-                
+
             }
         }
 
@@ -520,7 +522,7 @@ namespace Episode_Names.Anisearch
 
         private void searchTextFernsehserien(string searchText)
         {
-            Uri ur = new Uri($"{fernsehserienDomain}/suche/{adjustSearchTextTVDB(searchText).Replace("%2F"," ")}");
+            Uri ur = new Uri($"{fernsehserienDomain}/suche/{adjustSearchTextTVDB(searchText).Replace("%2F", " ")}");
             List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
 
             HtmlWeb web = new HtmlWeb();
@@ -552,7 +554,7 @@ namespace Episode_Names.Anisearch
 
             HtmlWeb web = new HtmlWeb();
             HtmlAgilityPack.HtmlDocument doc = web.Load(ur.AbsoluteUri);
-            
+
             string url = web.ResponseUri.ToString();
             if (url.StartsWith($"{baseUrl}?show=anime&aid="))
             {
@@ -594,18 +596,30 @@ namespace Episode_Names.Anisearch
 
         private void searchTextAnisearch(string url, string domain) //Thread
         {
-            WebRequest objRequest = WebRequest.Create(url);
+            var keyData = GetAnisearchSearchKey(domain);
+            var objRequest =  (HttpWebRequest)WebRequest.Create(url + $"&{keyData.key}");
+            objRequest.CookieContainer = keyData.context;
             WebResponse objResponse = objRequest.GetResponse();
             if (objResponse.ResponseUri.ToString().Contains("/index/"))
             {
                 List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
 
                 getHtmlDocument(out HtmlAgilityPack.HtmlDocument doc, objResponse);
-                        
 
-                HtmlNode table = doc.DocumentNode.SelectNodes("//table//tbody")[0];
-                        
-                foreach (HtmlNode row in table.SelectNodes("tr"))
+                var errorNotice = doc.DocumentNode.SelectSingleNode("//*[@class=\"msgBox\"]/*[@class=\"error\"]");
+                var tables = doc.DocumentNode.SelectNodes("//table//tbody");
+
+                if(tables == null)
+                {
+                    if(errorNotice != null)
+                    {
+                        MessageHandler.MessagesOK(MessageBoxIcon.Warning, "Invalid query");
+                    }
+                    setReceivedUrls(resultUrl);
+                    return;
+                }
+
+                foreach (HtmlNode row in tables.ElementAt(0).SelectNodes("tr"))
                 {
                     string text = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a")[0].InnerText);
                     string nurl = WebUtility.HtmlDecode(row.SelectNodes("th")[0].SelectNodes("a[@href]")[0].Attributes["href"].Value);
@@ -647,9 +661,27 @@ namespace Episode_Names.Anisearch
             objResponse.Close();
         }
 
+        private dynamic GetAnisearchSearchKey(string domain)
+        {
+            var objRequest = WebRequest.Create(domain);
+            var container = new CookieContainer();
+
+            WebResponse objResponse = objRequest.GetResponse();
+            List<KeyValuePair<string, string>> resultUrl = new List<KeyValuePair<string, string>>();
+            getHtmlDocument(out HtmlAgilityPack.HtmlDocument doc, objResponse);
+            var node = doc.DocumentNode.SelectSingleNode("//*[@data-search]");
+            string[] parts = node.Attributes["data-search"].Value.Split(',');
+            container.Add(new Cookie(parts[0], parts[1], "/", ".anisearch.com"));
+
+            return new {
+                key = $"{parts[0]}={parts[1]}",
+                context = container,
+            };
+        }
+
         private string getSearchUrlAnisearch(string searchText,string domain)
         {
-            return domain + "/anime/index/?char=all&text=" + searchText.Replace(" ", "%20") + "&q=true&view=2";
+            return domain + "/anime/index/?char=all&text=" + searchText.Replace(" ", "%20") + "&smode=1&view=2";
         }
 
         private void listResult_MouseDown(object sender, MouseEventArgs e)
