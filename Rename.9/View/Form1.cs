@@ -1,6 +1,7 @@
 ﻿using Episode_Names.Anisearch;
 using Episode_Names.Exceptions;
 using Episode_Names.Helper;
+using Episode_Names.View;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,10 +25,14 @@ namespace Episode_Names
         #endregion
 
 
-        public Form1()
+        public Form1(string path = null)
         {
             InitializeComponent();
             setData();
+            if(path != null)
+            {
+                txtPath.Text = path;
+            }
         }
 
         #region Standard und gespeicherte Daten setzen
@@ -828,6 +833,14 @@ namespace Episode_Names
             catch (Exception e1)
             {
                 ErrorHelper.HandleException(e1);
+            }
+        }
+
+        private void specialCharactersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var form = new SpecialCharacters())
+            {
+                form.ShowDialog();
             }
         }
     }

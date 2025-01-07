@@ -42,6 +42,7 @@
             this.newDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getFileNamesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ordnernamenHolenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sucheAufWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,7 +57,7 @@
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.lblReplace = new System.Windows.Forms.Label();
-            this.ordnernamenHolenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.specialCharactersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.nbPosition)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -136,7 +137,8 @@
             this.sucheAufWebsiteToolStripMenuItem,
             this.searchReplaceToolStripMenuItem,
             this.updateToolStripMenuItem,
-            this.infoToolStripMenuItem});
+            this.infoToolStripMenuItem,
+            this.specialCharactersToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(722, 24);
@@ -182,6 +184,13 @@
             this.getFileNamesToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
             this.getFileNamesToolStripMenuItem1.Text = "Dateinamen holen";
             this.getFileNamesToolStripMenuItem1.Click += new System.EventHandler(this.getFileNamesToolStripMenuItem_Click);
+            // 
+            // ordnernamenHolenToolStripMenuItem
+            // 
+            this.ordnernamenHolenToolStripMenuItem.Name = "ordnernamenHolenToolStripMenuItem";
+            this.ordnernamenHolenToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.ordnernamenHolenToolStripMenuItem.Text = "Ordnernamen holen";
+            this.ordnernamenHolenToolStripMenuItem.Click += new System.EventHandler(this.ordnernamenHolenToolStripMenuItem_Click);
             // 
             // sucheAufWebsiteToolStripMenuItem
             // 
@@ -306,12 +315,12 @@
             this.lblReplace.Text = "Ersetzen durch:";
             this.lblReplace.Visible = false;
             // 
-            // ordnernamenHolenToolStripMenuItem
+            // specialCharactersToolStripMenuItem
             // 
-            this.ordnernamenHolenToolStripMenuItem.Name = "ordnernamenHolenToolStripMenuItem";
-            this.ordnernamenHolenToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.ordnernamenHolenToolStripMenuItem.Text = "Ordnernamen holen";
-            this.ordnernamenHolenToolStripMenuItem.Click += new System.EventHandler(this.ordnernamenHolenToolStripMenuItem_Click);
+            this.specialCharactersToolStripMenuItem.Name = "specialCharactersToolStripMenuItem";
+            this.specialCharactersToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
+            this.specialCharactersToolStripMenuItem.Text = "Special Characters";
+            this.specialCharactersToolStripMenuItem.Click += new System.EventHandler(this.specialCharactersToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -380,6 +389,7 @@
         private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ordnernamenHolenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem specialCharactersToolStripMenuItem;
     }
 }
 
